@@ -1,0 +1,39 @@
+.medicine-card {
+    margin-bottom: 20px;
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+    padding: 20px;
+  }
+  
+  .medicine-card h2 {
+    margin-bottom: 10px;
+  }
+  
+  .medicine-card p {
+    margin-bottom: 5px;
+  }
+  
+  .medicine-card a {
+    color: #1890ff;
+  }
+  
+  .medicine-card img {
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .medicine-card h3 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .add-button {
+    margin-bottom: 20px;
+  }
+  

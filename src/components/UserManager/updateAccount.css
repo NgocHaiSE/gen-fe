@@ -1,0 +1,10 @@
+.update-account-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.update-account-form .ant-form-item-label {
+    width: 125px !important;
+    text-align: right;
+    padding-right: 8px;
+  }

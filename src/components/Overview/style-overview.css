@@ -1,0 +1,29 @@
+h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.88);
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.88);
+}
+
+p {
+    line-height: 1.5;
+    font-size: 14px;
+    text-indent: 20px;
+}
+
+.ul-class li {
+    line-height: 1.5;
+    font-size: 14px;
+    text-indent: 20px;
+}  
+
+.hinh1-overview {
+    width: 100%;
+    align-items: center;
+    display: block;
+}

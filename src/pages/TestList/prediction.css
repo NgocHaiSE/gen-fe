@@ -1,0 +1,170 @@
+/* CSS cho DrugInformation Component */
+
+/* Container chính */
+.drug-information-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Style cho header và tiêu đề */
+.drug-information-header {
+  margin-bottom: 30px;
+  background: linear-gradient(to right, #e6f7ff, #f0f7ff);
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 5px solid #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
+}
+
+.drug-information-container h1 {
+  color: #1890ff;
+  font-size: 28px;
+  margin-bottom: 0;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Style cho List Item */
+.ant-list-item {
+  padding: 20px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.ant-list-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #d9d9d9;
+}
+
+/* Style cho List Item Meta */
+.ant-list-item-meta {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px dashed #e8e8e8;
+}
+
+.ant-list-item-meta-title {
+  margin-bottom: 12px !important;
+  text-align: center;
+}
+
+.ant-list-item-meta-description {
+  color: #333;
+  font-size: 15px;
+  line-height: 1.7;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 4px solid #1890ff;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* Style cho gene name tag */
+.ant-list-item-meta-title .ant-tag {
+  font-size: 18px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(24, 144, 255, 0.2);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Style cho Descriptions */
+.ant-descriptions {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid #eee;
+}
+
+/* Làm nổi bật labels */
+.ant-descriptions-item-label {
+  color: #1890ff;
+  font-weight: 600;
+  background-color: #f0f7ff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+/* Làm nổi bật giá trị */
+.ant-descriptions-item-content {
+  color: #333;
+  font-weight: 500;
+  background-color: #fafafa;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 3px solid #1890ff;
+}
+
+/* Style cho Tag */
+.ant-tag {
+  margin: 4px;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ant-tag a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Nổi bật tag xem tài liệu */
+.ant-descriptions-item-content .ant-tag {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
+.ant-descriptions-item-content .ant-tag:hover {
+  transform: scale(1.15);
+}
+
+/* Style cho phân trang */
+.ant-pagination {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.ant-pagination-item {
+  border-radius: 4px;
+}
+
+.ant-pagination-item-active {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.ant-pagination-item-active a {
+  color: #fff;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .ant-descriptions-item {
+    padding-bottom: 12px;
+  }
+  
+  .ant-descriptions-row > th,
+  .ant-descriptions-row > td {
+    padding-bottom: 8px;
+  }
+  
+  .ant-descriptions-item-label,
+  .ant-descriptions-item-content {
+    display: block;
+    width: 100%;
+  }
+}

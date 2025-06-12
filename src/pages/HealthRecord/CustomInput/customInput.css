@@ -1,0 +1,10 @@
+:where(.css-dev-only-do-not-override-x36eeu).ant-checkbox-disabled + span {
+    color: #333 !important;
+}
+:where(.css-dev-only-do-not-override-x36eeu).ant-input-affix-wrapper-disabled {
+    color: #333 !important;
+}
+
+:where(.css-dev-only-do-not-override-x36eeu).ant-radio-wrapper-disabled {
+    color: #333 !important;
+}
