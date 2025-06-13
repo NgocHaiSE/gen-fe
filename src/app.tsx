@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import { currentUser as queryCurrentUser } from './services/authService/api';
+import './styles/tailwind.css';
 dotenv.config();
 
 const loginPath = '/user/login';

@@ -153,4 +153,8 @@ export default defineConfig({
     strategy: 'normal',
   },
   requestRecord: {},
+  // extraPostCSSPlugins: [
+  //   require('tailwindcss'),
+  //   require('autoprefixer'),
+  // ],
 });

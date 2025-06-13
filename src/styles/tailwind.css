@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components; 
+@tailwind utilities;
+
+/* Custom components cho dự án ung thư */
+@layer components {
+  .cancer-card {
+    @apply bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300;
+  }
+  
+  .cancer-header {
+    @apply text-2xl font-bold mb-4 text-gray-800;
+  }
+  
+  .cancer-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+  
+  .lung-cancer {
+    @apply bg-red-100 text-red-800 border border-red-200;
+  }
+  
+  .liver-cancer {
+    @apply bg-teal-100 text-teal-800 border border-teal-200;
+  }
+  
+  .breast-cancer {
+    @apply bg-pink-100 text-pink-800 border border-pink-200;
+  }
+  
+  .thyroid-cancer {
+    @apply bg-green-100 text-green-800 border border-green-200;
+  }
+  
+  .colorectal-cancer {
+    @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+  }
+
+  .btn-cancer-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+}
+
+/* Utilities cho responsive design */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .gradient-cancer-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+}
