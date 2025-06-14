@@ -1,5 +1,5 @@
 import token from '@/utils/token';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, FileWordOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Link, useAccess, useSearchParams } from '@umijs/max';
@@ -10,6 +10,7 @@ import { testCaseEp } from '../EndPoint';
 import AddTestCase from '@/components/TestList/addTestInformation';
 import UpdateTestCase from '@/components/TestList/updateTestInformation';
 import UploadTestCase from '@/components/TestList/uploadTestCase';
+import ExportModal from '@/components/TestList/ExportModal'; // Thêm import này
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 
 const { Search } = Input;
@@ -29,6 +30,9 @@ export default () => {
   const [IDTestData, setIDTestData] = useState<any[]>([]);
   const [resultStatus, setResultStatus] = useState<any[]>([]);
   const [errorList, setErrorList] = useState<any[]>([]);
+  // Thêm state cho export modal
+  const [exportModalVisible, setExportModalVisible] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<any>(null);
 
   const access = useAccess();
 
@@ -130,6 +134,12 @@ export default () => {
     getData(pagination.current, pagination.pageSize);
   }
 
+  // Thêm hàm xử lý export cho từng bệnh nhân
+  const handleExportClick = (patientData: any) => {
+    setSelectedPatient(patientData);
+    setExportModalVisible(true);
+  };
+
   const columns: ProColumns[] = [
     {
       key: 'patientID',
@@ -197,20 +207,28 @@ export default () => {
     {
       key: 'option',
       title: 'Tùy chọn',
-      width: 200,
+      width: 300,
       valueType: 'option',
       align: 'left',
       render: (text, data) => (
         <>
           {access.canAdmin || access.canDoctor ? (
             <div className="flex items-center space-x-2">
+              <Button
+                icon={<FileWordOutlined />}
+                size="medium"
+                className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:border-blue-300"
+                onClick={() => handleExportClick(data)}
+              >
+                Xuất file
+              </Button>
               <UploadTestCase patientID={data.patientID} onSuccess={handleUpSuccess} />
               <UpdateTestCase data={data} onSuccess={handleCRUDSuccess} />
               <Button
                 type="primary"
                 danger
                 size="medium"
-                className="bg-red-500 hover:bg-red-600 border-red-500 px-3 py-2"
+                className="bg-red-500 hover:bg-red-600 border-red-500"
                 onClick={() => handleDelete(data._id, data.patientID)}
               >
                 Xóa
@@ -277,27 +295,7 @@ export default () => {
                 </Title>
               </div>
             </div>
-
-            {/* {(access.canAdmin || access.canDoctor) && (
-              <div className="flex items-center space-x-3">
-                <AddTestCase onSuccess={handleCRUDSuccess} />
-              </div>
-            )} */}
           </div>
-
-          {/* Search Section */}
-          {/* <div className="flex items-center justify-between">
-            <div className="flex-1 max-w-md">
-              <Search
-                placeholder="Tìm kiếm theo tên bệnh nhân..."
-                allowClear
-                size="large"
-                onSearch={setSearchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-            </div>
-          </div> */}
         </div>
 
         {/* Table Section */}
@@ -306,7 +304,6 @@ export default () => {
             columns={columns}
             dataSource={data}
             toolbar={{
-              // title: 'Danh sách xét nghiệm',
               search: {
                 placeholder: 'Nhập thông tin',
                 onSearch: (value) => setSearchTerm(value),
@@ -328,7 +325,6 @@ export default () => {
               current: pagination.current,
               pageSize: pagination.pageSize,
               total: totalPages,
-              // showSizeChanger: true,
               showQuickJumper: true,
               showTotal: (total, range) =>
                 `${range[0]}-${range[1]} của ${total} xét nghiệm`,
@@ -339,6 +335,13 @@ export default () => {
             className="custom-table"
           />
         </Card>
+
+        {/* Export Modal */}
+        <ExportModal
+          visible={exportModalVisible}
+          onCancel={() => setExportModalVisible(false)}
+          selectedPatient={selectedPatient}
+        />
 
       </div>
 
