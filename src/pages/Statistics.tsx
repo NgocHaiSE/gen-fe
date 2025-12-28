@@ -13,18 +13,14 @@ import {
     Cell,
     Legend,
 } from 'recharts';
+import statisticsService from '../services/statistics';
 
-// Mock statistics data
-const mockStatistics = {
-    total: 15420,
-    details: [
-        { organ: 'lung', name: 'Phổi', count: 5230, percentage: '33.9%' },
-        { organ: 'breast', name: 'Vú', count: 4120, percentage: '26.7%' },
-        { organ: 'colorectal', name: 'Đại tràng', count: 2850, percentage: '18.5%' },
-        { organ: 'liver', name: 'Gan', count: 1890, percentage: '12.3%' },
-        { organ: 'thyroid', name: 'Tuyến giáp', count: 1330, percentage: '8.6%' },
-    ]
-};
+interface DetailItem {
+    organ: 'lung' | 'breast' | 'colorectal' | 'liver' | 'thyroid';
+    name: string;
+    count: number;
+    percentage: string;
+}
 
 const organColors: Record<string, string> = {
     'Phổi': '#1BA6A6',
@@ -45,31 +41,61 @@ const organIcons: Record<string, React.ReactNode> = {
 
 const Statistics = () => {
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState(mockStatistics);
+    const [total, setTotal] = useState(0);
+    const [details, setDetails] = useState<DetailItem[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Simulate API loading
-        setTimeout(() => {
-            setData(mockStatistics);
-            setLoading(false);
-        }, 800);
+        const fetchData = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const res = await statisticsService.getCancerStatistics();
+                if (res?.success && res.data) {
+                    setTotal(res.data.total);
+                    setDetails(res.data.details || []);
+                } else {
+                    setError(res?.message || 'Không thể tải dữ liệu thống kê');
+                }
+            } catch (e: any) {
+                console.error('Error fetching statistics:', e);
+                setError(e?.message || 'Có lỗi xảy ra khi tải dữ liệu');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
     const barData = useMemo(() => {
-        const arr = data.details.map(d => ({ type: d.name, count: d.count }));
+        const arr = details.map(d => ({ type: d.name, count: d.count }));
         arr.sort((a, b) => b.count - a.count);
-        return [{ type: 'Tổng', count: data.total }, ...arr];
-    }, [data]);
+        return [{ type: 'Tổng', count: total }, ...arr];
+    }, [details, total]);
 
     const pieData = useMemo(() =>
-        data.details.map(d => ({ type: d.name, count: d.count })),
-        [data]
+        details.map(d => ({ type: d.name, count: d.count })),
+        [details]
     );
 
     if (loading) {
         return (
-            <div className="w-full p-6 bg-pure-white rounded-xl shadow-sm border border-slate-light flex items-center justify-center min-h-[400px]">
+            <div className="w-full p-6 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center min-h-[400px]">
                 <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="w-full p-6 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center min-h-[400px]">
+                <p className="text-red-500 mb-4">{error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600"
+                >
+                    Thử lại
+                </button>
             </div>
         );
     }
@@ -77,43 +103,43 @@ const Statistics = () => {
     return (
         <div className="w-full animate-fade-in space-y-6">
             {/* Header */}
-            <div className="bg-pure-white rounded-xl shadow-sm border border-slate-light p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h1 className="text-2xl font-bold text-teal-900 mb-2 flex items-center gap-3 uppercase">
                     <BarChart3 className="w-7 h-7 text-teal-500" />
                     THỐNG KÊ XÉT NGHIỆM UNG THƯ
                 </h1>
-                <p className="text-slate-medium">Tổng quan về số liệu xét nghiệm gen ở các loại ung thư</p>
+                <p className="text-slate-500">Tổng quan về số liệu xét nghiệm gen ở các loại ung thư</p>
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                 {/* Total Card */}
                 <div className="bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl shadow-lg p-5 text-white">
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-teal-100 text-sm font-medium">Tổng số ca</p>
-                            <p className="text-3xl font-bold mt-1">{data.total.toLocaleString()}</p>
+                            <p className="text-3xl font-bold mt-1">{total.toLocaleString()}</p>
                         </div>
                         <Users className="w-10 h-10 text-teal-200" />
                     </div>
                 </div>
 
                 {/* Individual Cancer Stats */}
-                {data.details.map((item) => (
+                {details.map((item) => (
                     <div
                         key={item.organ}
-                        className="bg-pure-white rounded-xl shadow-sm border border-slate-light p-5 hover:shadow-md transition-shadow"
+                        className="bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:shadow-md transition-shadow"
                     >
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-slate-medium text-sm font-medium">{item.name}</p>
+                                <p className="text-slate-500 text-sm font-medium">{item.name}</p>
                                 <p
                                     className="text-2xl font-bold mt-1"
                                     style={{ color: organColors[item.name] }}
                                 >
                                     {item.count.toLocaleString()}
                                 </p>
-                                <p className="text-xs text-slate-medium mt-1">{item.percentage}</p>
+                                <p className="text-xs text-slate-500 mt-1">{item.percentage}%</p>
                             </div>
                             <div
                                 className="p-2.5 rounded-full"
@@ -131,7 +157,7 @@ const Statistics = () => {
             {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Bar Chart */}
-                <div className="bg-pure-white rounded-xl shadow-sm border border-slate-light p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                     <h2 className="text-lg font-bold text-teal-900 mb-4 flex items-center gap-2">
                         <BarChart3 className="w-5 h-5 text-teal-500" />
                         Biểu đồ cột - Số lượng ca bệnh
@@ -178,7 +204,7 @@ const Statistics = () => {
                 </div>
 
                 {/* Pie Chart */}
-                <div className="bg-pure-white rounded-xl shadow-sm border border-slate-light p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                     <h2 className="text-lg font-bold text-teal-900 mb-4 flex items-center gap-2">
                         <PieChart className="w-5 h-5 text-teal-500" />
                         Biểu đồ tròn - Tỷ lệ phần trăm
@@ -228,7 +254,7 @@ const Statistics = () => {
             <div className="bg-teal-50 rounded-xl border border-teal-100 p-4 flex items-center gap-3">
                 <TrendingUp className="w-6 h-6 text-teal-600" />
                 <p className="text-sm text-teal-900">
-                    <span className="font-semibold">Xu hướng:</span> Số ca xét nghiệm gen tăng 15.2% so với quý trước
+                    <span className="font-semibold">Dữ liệu cập nhật:</span> Thống kê xét nghiệm gen theo loại ung thư từ hệ thống
                 </p>
             </div>
         </div>

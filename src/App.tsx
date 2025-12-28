@@ -16,10 +16,13 @@ import Statistics from './pages/Statistics.tsx'
 import PatientManagement from './pages/PatientManagement.tsx'
 import PatientList from './pages/PatientList.tsx'
 import Collections from './pages/Collections.tsx'
+import CollectionDetail from './pages/CollectionDetail.tsx'
+import VariantDetail from './pages/VariantDetail.tsx'
 import DevTeams from './pages/DevTeams.tsx'
 import HealthRecordDetail from './pages/HealthRecordDetail.tsx'
 import TestList from './pages/TestList.tsx'
 import TestDetail from './pages/TestDetail.tsx'
+import PredictionDrugDetail from './pages/PredictionDrugDetail.tsx'
 
 
 
@@ -98,9 +101,12 @@ function App() {
                 <Route path="tests">
                     <Route path="add-test" element={<TestList />} />
                     <Route path="collections" element={<Collections />} />
+                    <Route path="collections/:id" element={<CollectionDetail />} />
                     <Route path="statistics" element={<Statistics />} />
                     <Route path="detail/:patientId" element={<TestDetail />} />
                     <Route path="variant/:patientId/:variantId" element={<TestDetail />} />
+                    <Route path="variant-detail/:patientId/:rsId" element={<VariantDetail />} />
+                    <Route path="prediction-drug/:patientId" element={<PredictionDrugDetail />} />
                 </Route>
 
                 {/* Patient Management Routes */}

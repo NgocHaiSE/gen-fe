@@ -186,11 +186,33 @@ class testCaseController {
         });
     }
 
-    delete(req, res, next) {
-        testCaseModel
-            .deleteOne({ _id: req.params.id })
-            .then(() => res.redirect("back"))
-            .catch(next);
+    async delete(req, res, next) {
+        try {
+            const testCase = await testCaseModel.findById(req.params.id);
+            if (!testCase) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Test case not found'
+                });
+            }
+
+            // Delete the test case
+            await testCaseModel.deleteOne({ _id: req.params.id });
+
+            // Also delete associated test data
+            await dataTestModel.deleteMany({ IDTest: testCase.patientID });
+
+            return res.status(200).json({
+                success: true,
+                message: 'Xóa xét nghiệm thành công'
+            });
+        } catch (error) {
+            console.error('Error deleting test case:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Có lỗi xảy ra khi xóa xét nghiệm'
+            });
+        }
     }
 
     addTest(req, res) {

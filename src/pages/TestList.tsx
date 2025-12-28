@@ -9,7 +9,8 @@ import AddToCollectionModal from '../components/AddToCollectionModal';
 
 // ==================== TYPES ====================
 interface TestCase {
-    _id: string;
+    _id?: string;
+    Id?: string;
     patientID: string;
     patientName: string;
     primaryTissue: string;
@@ -17,13 +18,6 @@ interface TestCase {
     hasResult?: boolean;
     resultCount?: number;
     createAt?: string;
-}
-
-interface PaginationInfo {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
 }
 
 // ==================== CONSTANTS ====================
@@ -125,15 +119,59 @@ const TestList = () => {
         fetchData(1, newSize, searchTerm);
     };
 
-    // Delete
+    // Delete single test case
     const handleDelete = async (id: string, patientID: string) => {
-        if (!window.confirm(`Bạn muốn xóa xét nghiệm ID: ${patientID}?`)) return;
+        if (!window.confirm(`Bạn có chắc chắn muốn xóa xét nghiệm ID: ${patientID}?\n\nThao tác này sẽ xóa cả kết quả xét nghiệm liên quan và không thể hoàn tác.`)) return;
         try {
             await request.delete(`/test-case/delete/${id}`);
+            // Success - refresh data
+            setSelectedIds(prev => prev.filter(pid => pid !== patientID));
             fetchData(currentPage, pageSize, searchTerm);
-        } catch (error) {
-            console.error('Error deleting:', error);
+        } catch (error: any) {
+            // Check if it's a redirect (302) which means success on old backend
+            const status = error?.response?.status;
+            if (status === 302 || status === 301) {
+                // Redirect means success on old backend
+                setSelectedIds(prev => prev.filter(pid => pid !== patientID));
+                fetchData(currentPage, pageSize, searchTerm);
+            } else {
+                console.error('Error deleting:', error);
+                // Don't show error if it might have succeeded (check if item still exists)
+                fetchData(currentPage, pageSize, searchTerm);
+            }
         }
+    };
+
+    // Delete multiple selected test cases
+    const handleDeleteSelected = async () => {
+        if (selectedIds.length === 0) return;
+        if (!window.confirm(`Bạn có chắc chắn muốn xóa ${selectedIds.length} xét nghiệm đã chọn?\n\nThao tác này sẽ xóa cả kết quả xét nghiệm liên quan và không thể hoàn tác.`)) return;
+
+        // Find the _id or Id for each selected patientID (CaseConverter may transform _id to Id)
+        const idsToDelete = data
+            .filter(item => selectedIds.includes(item.patientID))
+            .map(item => item._id || item.Id)
+            .filter(Boolean);
+
+        // Delete each one - count as success even if redirect (old backend behavior)
+        let successCount = 0;
+        for (const id of idsToDelete) {
+            try {
+                await request.delete(`/test-case/delete/${id}`);
+                successCount++;
+            } catch (err: any) {
+                // Redirect (302) means success on old backend
+                const status = err?.response?.status;
+                if (status === 302 || status === 301) {
+                    successCount++;
+                } else {
+                    console.error(`Error deleting ${id}:`, err);
+                }
+            }
+        }
+
+        setSelectedIds([]);
+        fetchData(currentPage, pageSize, searchTerm);
     };
 
     // Add new test
@@ -155,14 +193,30 @@ const TestList = () => {
     // Download
     const handleDownload = async (item: TestCase) => {
         try {
-            const response = await request.post('/test-case/download', item, { responseType: 'blob' });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://aicancer.io.vn/api';
+            const res = await fetch(`${apiUrl}/test-case/download`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(item),
+            });
+
+            if (!res.ok) {
+                throw new Error('Download failed');
+            }
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
             link.download = `KQXN_${item.patientName}.docx`;
             link.click();
+
+            // Cleanup
+            window.URL.revokeObjectURL(url);
+            alert(`Đang tải xuống dữ liệu cho bệnh nhân: ${item.patientName}`);
         } catch (error) {
             console.error('Error downloading:', error);
+            alert('Có lỗi xảy ra khi tải xuống. Vui lòng thử lại.');
         }
     };
 
@@ -293,6 +347,13 @@ const TestList = () => {
                             Thêm vào bộ sưu tập
                         </button>
                         <button
+                            onClick={handleDeleteSelected}
+                            className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                            Xóa đã chọn
+                        </button>
+                        <button
                             onClick={() => setSelectedIds([])}
                             className="px-3 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors text-sm"
                         >
@@ -404,7 +465,7 @@ const TestList = () => {
                                                 <button onClick={() => handleDownload(item)} disabled={!item.hasResult} className="p-2 text-green-600 hover:bg-green-100 rounded-md disabled:opacity-50" title="Tải xuống">
                                                     <Download className="w-4 h-4" />
                                                 </button>
-                                                <button onClick={() => handleDelete(item._id, item.patientID)} className="p-2 text-red-600 hover:bg-red-100 rounded-md" title="Xóa">
+                                                <button onClick={() => handleDelete((item._id || item.Id)!, item.patientID)} className="p-2 text-red-600 hover:bg-red-100 rounded-md" title="Xóa">
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </div>
@@ -550,7 +611,14 @@ const TestList = () => {
                     setShowCollectionModal(false);
                     setSelectedIds([]);
                 }}
-                testCaseIds={selectedIds}
+                testCaseIds={
+                    // Convert selected patientIDs to _id values (like gen-fe line 823)
+                    // Note: CaseConverter transforms _id to Id
+                    data
+                        .filter(item => selectedIds.includes(item.patientID))
+                        .map(item => (item as any).Id || (item as any)._id || (item as any).id || item.patientID)
+                        .filter(Boolean)
+                }
             />
         </div>
     );

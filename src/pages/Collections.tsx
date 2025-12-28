@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FlaskConical, Search, Plus, ChevronRight, TestTube, Microscope, FileText, Trash2, Edit2, X, Loader2, Tag } from 'lucide-react';
 import collectionsService, { Collection } from '../services/collections';
 
 const Collections = () => {
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [collections, setCollections] = useState<Collection[]>([]);
@@ -73,7 +75,7 @@ const Collections = () => {
 
             let res;
             if (editingCollection) {
-                res = await collectionsService.update(editingCollection._id, payload);
+                res = await collectionsService.update((editingCollection as any).Id || editingCollection._id, payload);
             } else {
                 res = await collectionsService.create(payload);
             }
@@ -99,7 +101,7 @@ const Collections = () => {
             return;
         }
         try {
-            const res = await collectionsService.delete(collection._id);
+            const res = await collectionsService.delete((collection as any).Id || collection._id);
             if (res?.success) {
                 showMessage('success', 'Đã xóa bộ sưu tập');
                 fetchCollections();
@@ -211,56 +213,60 @@ const Collections = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredCollections.map((collection) => (
-                        <div
-                            key={collection._id}
-                            className="bg-pure-white rounded-xl shadow-sm border border-slate-light p-5 hover:shadow-lg transition-all group"
-                        >
-                            <div className="flex items-start justify-between mb-3">
-                                <div className={`w-12 h-12 ${getCategoryColor(collection.tags?.[0] || '')} rounded-xl flex items-center justify-center`}>
-                                    <TestTube className="w-6 h-6 text-white" />
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    <span className="text-xs font-medium text-slate-medium bg-slate-100 px-2 py-1 rounded">
-                                        {collection.testCasesCount ?? 0} ca
-                                    </span>
-                                    <button
-                                        onClick={() => openEditModal(collection)}
-                                        className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-md transition-colors"
-                                        title="Chỉnh sửa"
-                                    >
-                                        <Edit2 className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(collection)}
-                                        className="p-1.5 text-red-600 hover:bg-red-100 rounded-md transition-colors"
-                                        title="Xóa"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                            <h3 className="font-bold text-teal-900 mb-1 group-hover:text-teal-600 transition-colors">
-                                {collection.collectionName}
-                            </h3>
-                            <p className="text-sm text-slate-medium mb-3 line-clamp-2">
-                                {collection.description || 'Không có mô tả'}
-                            </p>
-                            <div className="flex items-center justify-between">
-                                <div className="flex flex-wrap gap-1">
-                                    {collection.tags?.slice(0, 3).map((tag, idx) => (
-                                        <span
-                                            key={idx}
-                                            className="text-xs font-medium px-2 py-1 rounded-full bg-teal-50 text-teal-700"
-                                        >
-                                            {tag}
+                    {filteredCollections.map((collection) => {
+                        const collectionId = (collection as any).Id || collection._id;
+                        return (
+                            <div
+                                key={collectionId}
+                                onClick={() => navigate(`/tests/collections/${collectionId}`)}
+                                className="bg-pure-white rounded-xl shadow-sm border border-slate-light p-5 hover:shadow-lg transition-all group cursor-pointer"
+                            >
+                                <div className="flex items-start justify-between mb-3">
+                                    <div className={`w-12 h-12 ${getCategoryColor(collection.tags?.[0] || '')} rounded-xl flex items-center justify-center`}>
+                                        <TestTube className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <span className="text-xs font-medium text-slate-medium bg-slate-100 px-2 py-1 rounded">
+                                            {collection.testCasesCount ?? 0} ca
                                         </span>
-                                    ))}
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); openEditModal(collection); }}
+                                            className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-md transition-colors"
+                                            title="Chỉnh sửa"
+                                        >
+                                            <Edit2 className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); handleDelete(collection); }}
+                                            className="p-1.5 text-red-600 hover:bg-red-100 rounded-md transition-colors"
+                                            title="Xóa"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
                                 </div>
-                                <ChevronRight className="w-5 h-5 text-slate-medium group-hover:text-teal-500 transition-colors" />
+                                <h3 className="font-bold text-teal-900 mb-1 group-hover:text-teal-600 transition-colors">
+                                    {collection.collectionName}
+                                </h3>
+                                <p className="text-sm text-slate-medium mb-3 line-clamp-2">
+                                    {collection.description || 'Không có mô tả'}
+                                </p>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-wrap gap-1">
+                                        {collection.tags?.slice(0, 3).map((tag, idx) => (
+                                            <span
+                                                key={idx}
+                                                className="text-xs font-medium px-2 py-1 rounded-full bg-teal-50 text-teal-700"
+                                            >
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <ChevronRight className="w-5 h-5 text-slate-medium group-hover:text-teal-500 transition-colors" />
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 

@@ -310,6 +310,11 @@ const TestDetail = () => {
     const pathogenicCount = tableData.filter(v => v.priority <= 3).length;
     const uncertainCount = tableData.filter(v => v.priority >= 4 && v.priority <= 9).length;
 
+    // Build nucleotide list for drug prediction
+    const nucleotideList = useMemo(() => {
+        return geneData.flatMap(gene => gene.details.map(detail => detail.Nucleotide));
+    }, [geneData]);
+
     const getCancerType = () => {
         const mapping: Record<string, string> = {
             'hepatocellular_carcinoma': 'liver',
@@ -367,7 +372,13 @@ const TestDetail = () => {
                             <User className="w-5 h-5" />
                             <h2 className="text-lg font-semibold">Thông tin bệnh nhân</h2>
                         </div>
-                        <button className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">
+                        <button
+                            onClick={() => navigate(
+                                `/tests/prediction-drug/${patientId}?typeCancer=${getCancerType()}`,
+                                { state: { variants: nucleotideList } }
+                            )}
+                            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors"
+                        >
                             Xem thuốc điều trị
                         </button>
                     </div>
@@ -464,7 +475,7 @@ const TestDetail = () => {
                                                 <div className="flex items-center justify-center gap-2">
                                                     <button
                                                         onClick={() => {
-                                                            navigate(`/tests/variant/${patientId}/${row.rawData.RS_ID || row.key}`);
+                                                            navigate(`/tests/variant-detail/${patientId}/${row.rawData.RS_ID || row.key}`);
                                                         }}
                                                         className="px-3 py-1 text-blue-600 hover:bg-blue-50 rounded text-sm font-medium"
                                                     >

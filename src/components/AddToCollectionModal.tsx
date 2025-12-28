@@ -25,10 +25,11 @@ const AddToCollectionModal = ({ open, onClose, testCaseIds }: AddToCollectionMod
     const loadCollections = async () => {
         try {
             const res = await collectionsService.myCollections();
-            console.log('Collections API response:', res);
-            console.log('Collections data:', res.data);
-            if (res.success) {
+            if (res && res.success) {
                 setCollections(res.data || []);
+            } else if (res && Array.isArray(res)) {
+                // Handle case where API returns array directly
+                setCollections(res);
             }
         } catch (e) {
             console.error('Error loading collections:', e);
@@ -139,7 +140,9 @@ const AddToCollectionModal = ({ open, onClose, testCaseIds }: AddToCollectionMod
                     {!createMode && (
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-2">Chọn bộ sưu tập</label>
+                                <label className="block text-sm font-medium text-slate-700 mb-2">
+                                    Chọn bộ sưu tập
+                                </label>
                                 <select
                                     value={selectedCollectionId}
                                     onChange={(e) => setSelectedCollectionId(e.target.value)}
@@ -147,13 +150,9 @@ const AddToCollectionModal = ({ open, onClose, testCaseIds }: AddToCollectionMod
                                 >
                                     <option value="">-- Chọn bộ sưu tập --</option>
                                     {collections.map((c: any) => {
-                                        // Try _id first, then id, then any other common ID patterns
-                                        const collectionId = c._id || c.id || c.Id || c.ID || '';
-                                        console.log('Collection item:', c, 'ID:', collectionId);
-                                        if (!collectionId) {
-                                            console.warn('Collection missing ID:', c);
-                                            return null;
-                                        }
+                                        // CaseConverter transforms _id to Id
+                                        const collectionId = c.Id || c._id || c.id || '';
+                                        if (!collectionId) return null;
                                         return (
                                             <option key={collectionId} value={collectionId}>
                                                 {c.collectionName} {c.testCasesCount !== undefined && `(${c.testCasesCount} ca)`}
