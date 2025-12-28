@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  /* Teal Scale */
+  --color-teal-900: #0E4F4F;
+  --color-teal-700: #117C7C;
+  --color-teal-500: #1BA6A6;
+  --color-teal-300: #5CCCCC;
+  --color-teal-100: #DFF5F5;
+  --color-teal-50: #F2FBFB;
+
+  /* Neutral Scale */
+  --color-ink-black: #0F172A;
+  --color-slate-dark: #334155;
+  --color-slate-medium: #64748B;
+  --color-slate-light: #CBD5E1;
+  --color-off-white: #F8FAFC;
+  --color-pure-white: #FFFFFF;
+
+  /* Semantic Colors */
+  --color-research-blue: #2563EB;
+  --color-verified-green: #2E7D32;
+  --color-warning-amber: #F59E0B;
+  --color-error-red: #B91C1C;
+  --color-info-cyan: #0891B2;
+
+  /* Search & Interactive */
+  --color-keyword-highlight: #ECFEFF;
+  --color-active-filter: #CCFBF1;
+  --color-focus-ring: #1BA6A6;
+
+  /* Dark Mode (for reference) */
+  --color-dark-bg: #0B1F1F;
+  --color-dark-surface: #102A2A;
+  --color-dark-border: #1F4F4F;
+
+  /* Backward compatibility aliases */
+  --color-medical-primary: #0E4F4F;
+  --color-medical-accent: #1BA6A6;
+  --color-bg-main: #F8FAFC;
+  --color-bg-card: #FFFFFF;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748B;
+  --color-divider: #CBD5E1;
+  --color-clinical-teal: #1BA6A6;
+  --color-deep-navy: #0E4F4F;
+  --color-filter-active: #CCFBF1;
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+body {
+  background-color: var(--color-bg-medical);
+  color: var(--color-text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
