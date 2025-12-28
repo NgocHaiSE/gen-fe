@@ -11,6 +11,13 @@ interface HealthRecordData {
     typeHealthRecord: string;
 }
 
+interface PaginationInfo {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+}
+
 interface HealthRecordProps {
     type: string;
 }
@@ -22,6 +29,9 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [pageSize, setPageSize] = useState(10);
+    const [totalRecords, setTotalRecords] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
+    const [isSearching, setIsSearching] = useState(false);
     const pageSizeOptions = [10, 20, 50, 100];
 
     // Get record type from cancer type (e.g., lung-cancer -> lung-record)
@@ -29,49 +39,82 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
         return type.replace('cancer', 'record');
     };
 
-    // Fetch records from API
+    // Fetch records from API with server-side pagination
     const fetchRecords = async (page: number, limit: number) => {
         setLoading(true);
+        setIsSearching(false);
         try {
             const recordType = getRecordType();
             // API endpoint: /{recordType}/get-all?page=X&limit=Y
             const response = await request.get(`/${recordType}/get-all`, {
                 params: { page, limit }
             });
-            const data = response.data?.data || response.data || [];
+
+            const responseData = response.data;
+            const data = responseData?.data || [];
+            const pagination: PaginationInfo = responseData?.pagination || {
+                page: 1,
+                limit: 10,
+                total: 0,
+                totalPages: 1
+            };
+
             setRecords(Array.isArray(data) ? data.map((item: any) => ({
                 ...item,
                 typeHealthRecord: recordType
             })) : []);
+            setTotalRecords(pagination.total);
+            setTotalPages(pagination.totalPages);
         } catch (error) {
             console.error('Error fetching health records:', error);
             setRecords([]);
+            setTotalRecords(0);
+            setTotalPages(1);
         } finally {
             setLoading(false);
         }
     };
 
-    // Search health records
-    const handleSearch = async () => {
+    // Search health records with server-side pagination
+    const handleSearch = async (page: number = 1) => {
         if (!searchQuery.trim()) {
+            setIsSearching(false);
             fetchRecords(currentPage, pageSize);
             return;
         }
 
         setLoading(true);
+        setIsSearching(true);
         try {
             const recordType = getRecordType();
             // API endpoint: /{recordType}/search
             const response = await request.post(`/${recordType}/search`, {
-                healthRecordId: searchQuery
+                healthRecordId: searchQuery,
+                page,
+                limit: pageSize
             });
-            const data = response.data?.data || response.data || [];
+
+            const responseData = response.data;
+            const data = responseData?.data || [];
+            const pagination: PaginationInfo = responseData?.pagination || {
+                page: 1,
+                limit: pageSize,
+                total: 0,
+                totalPages: 1
+            };
+
             setRecords(Array.isArray(data) ? data.map((item: any) => ({
                 ...item,
                 typeHealthRecord: recordType
             })) : []);
+            setTotalRecords(pagination.total);
+            setTotalPages(pagination.totalPages);
+            setCurrentPage(page);
         } catch (error) {
             console.error('Error searching health records:', error);
+            setRecords([]);
+            setTotalRecords(0);
+            setTotalPages(1);
         } finally {
             setLoading(false);
         }
@@ -85,7 +128,11 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
             // API endpoint: /{recordType}/delete-health-record
             await request.post(`/${recordType}/delete-health-record`, { id });
             // Reload records after delete
-            fetchRecords(currentPage, pageSize);
+            if (isSearching) {
+                handleSearch(currentPage);
+            } else {
+                fetchRecords(currentPage, pageSize);
+            }
         } catch (error) {
             console.error('Error deleting health record:', error);
         }
@@ -96,29 +143,38 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
         navigate(`/health-record/${recordType}/${id}`);
     };
 
+    // Handle page change
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        if (isSearching) {
+            handleSearch(newPage);
+        } else {
+            fetchRecords(newPage, pageSize);
+        }
+    };
+
+    // Handle page size change
+    const handlePageSizeChange = (newSize: number) => {
+        setPageSize(newSize);
+        setCurrentPage(1);
+        if (isSearching) {
+            handleSearch(1);
+        } else {
+            fetchRecords(1, newSize);
+        }
+    };
+
+    // Initial load
     useEffect(() => {
         fetchRecords(currentPage, pageSize);
-    }, [type, currentPage, pageSize]);
+    }, [type]);
 
     // Reset on type change
     useEffect(() => {
         setCurrentPage(1);
         setSearchQuery('');
+        setIsSearching(false);
     }, [type]);
-
-    // Filter records by search (client-side fallback)
-    const filteredRecords = records.filter(record =>
-        record.fullname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        record.PatineId?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    const totalPages = Math.ceil(filteredRecords.length / pageSize);
-
-    // Paginate records
-    const paginatedRecords = filteredRecords.slice(
-        (currentPage - 1) * pageSize,
-        currentPage * pageSize
-    );
 
     const getCancerName = () => {
         switch (type) {
@@ -144,19 +200,40 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-medium w-5 h-5" />
                         <input
                             type="text"
-                            placeholder="Hãy nhập mã bệnh án..."
+                            placeholder="Hãy nhập mã bệnh án, CCCD hoặc tên bệnh nhân..."
                             className="w-full pl-10 pr-4 py-2.5 border border-slate-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    setCurrentPage(1);
+                                    handleSearch(1);
+                                }
+                            }}
                         />
                     </div>
                     <button
-                        onClick={handleSearch}
+                        onClick={() => {
+                            setCurrentPage(1);
+                            handleSearch(1);
+                        }}
                         className="px-4 py-2.5 border border-slate-light rounded-lg hover:bg-slate-50 transition-colors text-sm font-medium"
                     >
                         Tìm kiếm
                     </button>
+                    {isSearching && (
+                        <button
+                            onClick={() => {
+                                setSearchQuery('');
+                                setIsSearching(false);
+                                setCurrentPage(1);
+                                fetchRecords(1, pageSize);
+                            }}
+                            className="px-4 py-2.5 text-slate-medium hover:text-slate-dark transition-colors text-sm"
+                        >
+                            Xóa bộ lọc
+                        </button>
+                    )}
                 </div>
 
                 {/* Add button */}
@@ -171,7 +248,8 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
 
             {/* Results count */}
             <div className="mb-4 text-sm text-slate-medium">
-                Tổng số: <span className="font-semibold text-teal-700">{filteredRecords.length}</span> bệnh án
+                {isSearching && <span className="text-teal-600 mr-2">Kết quả tìm kiếm:</span>}
+                Tổng số: <span className="font-semibold text-teal-700">{totalRecords}</span> bệnh án
             </div>
 
             {/* Table */}
@@ -192,15 +270,17 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
                                     Đang tải...
                                 </td>
                             </tr>
-                        ) : paginatedRecords.length === 0 ? (
+                        ) : records.length === 0 ? (
                             <tr>
                                 <td colSpan={4} className="text-center py-8">
                                     <FileText className="w-12 h-12 text-slate-light mx-auto mb-2" />
-                                    <p className="text-slate-medium">Chưa có bệnh án nào</p>
+                                    <p className="text-slate-medium">
+                                        {isSearching ? 'Không tìm thấy kết quả phù hợp' : 'Chưa có bệnh án nào'}
+                                    </p>
                                 </td>
                             </tr>
                         ) : (
-                            paginatedRecords.map((record) => (
+                            records.map((record) => (
                                 <tr
                                     key={record.id}
                                     className="border-b border-slate-light hover:bg-teal-50/50 transition-colors"
@@ -240,10 +320,7 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
                     <span className="text-sm text-slate-medium">Hiển thị</span>
                     <select
                         value={pageSize}
-                        onChange={(e) => {
-                            setPageSize(Number(e.target.value));
-                            setCurrentPage(1);
-                        }}
+                        onChange={(e) => handlePageSizeChange(Number(e.target.value))}
                         className="px-3 py-1.5 border border-slate-light rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                     >
                         {pageSizeOptions.map(size => (
@@ -257,7 +334,7 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
                 {totalPages > 1 && (
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                             disabled={currentPage === 1}
                             className="p-2 rounded-md border border-slate-light hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
@@ -278,7 +355,7 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
                             return (
                                 <button
                                     key={pageNum}
-                                    onClick={() => setCurrentPage(pageNum)}
+                                    onClick={() => handlePageChange(pageNum)}
                                     className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${currentPage === pageNum
                                         ? 'bg-teal-500 text-white'
                                         : 'border border-slate-light hover:bg-teal-50 text-slate-dark'
@@ -290,7 +367,7 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
                         })}
 
                         <button
-                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                             disabled={currentPage === totalPages}
                             className="p-2 rounded-md border border-slate-light hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
@@ -298,6 +375,11 @@ const HealthRecord = ({ type }: HealthRecordProps) => {
                         </button>
                     </div>
                 )}
+
+                {/* Page info */}
+                <div className="text-sm text-slate-medium">
+                    Trang {currentPage} / {totalPages}
+                </div>
             </div>
         </div>
     );

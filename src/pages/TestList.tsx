@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
     Search, Plus, Trash2, Download, Upload, FileText, FlaskConical,
-    RefreshCw, ChevronLeft, ChevronRight
+    RefreshCw, ChevronLeft, ChevronRight, X
 } from 'lucide-react';
 import request from '../utils/request';
 
@@ -13,8 +13,16 @@ interface TestCase {
     patientName: string;
     primaryTissue: string;
     testName: string;
-    status?: string;
-    createdAt?: string;
+    hasResult?: boolean;
+    resultCount?: number;
+    createAt?: string;
+}
+
+interface PaginationInfo {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
 }
 
 // ==================== CONSTANTS ====================
@@ -32,12 +40,12 @@ const TestList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [data, setData] = useState<TestCase[]>([]);
-    const [resultStatus, setResultStatus] = useState<Record<string, { read1: boolean; read2: boolean }>>({});
-    const [detailList, setDetailList] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+    const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
     const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
     const [pageSize, setPageSize] = useState(parseInt(searchParams.get('pageSize') || '10'));
+    const [totalRecords, setTotalRecords] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [showAddModal, setShowAddModal] = useState(false);
     const [uploadModal, setUploadModal] = useState<{ visible: boolean; patientId: string; readType: 'read1' | 'read2' } | null>(null);
@@ -48,90 +56,78 @@ const TestList = () => {
     const [newTest, setNewTest] = useState({ patientID: '', patientName: '', primaryTissue: '', testName: '' });
     const pageSizeOptions = [10, 20, 50, 100];
 
-    // Fetch data
-    const fetchData = async (page: number, limit: number) => {
+    // Fetch data with optimized single API call
+    const fetchData = async (page: number, limit: number, search: string = '') => {
         setLoading(true);
         try {
-            const response = await request.get(`/test-case?page=${page}&limit=${limit}`);
+            // Use new optimized endpoint with aggregation
+            const response = await request.get('/test-case/list', {
+                params: { page, limit, search }
+            });
+
             const result = response.data;
-            setData(result.testCaseModels || result.data || []);
-            setTotalPages(result.totalPages || 1);
+            setData(result.data || []);
+
+            if (result.pagination) {
+                setTotalRecords(result.pagination.total);
+                setTotalPages(result.pagination.totalPages);
+            }
+
+            // Update URL params
+            const newParams = new URLSearchParams();
+            newParams.set('page', page.toString());
+            newParams.set('pageSize', limit.toString());
+            if (search) newParams.set('search', search);
+            setSearchParams(newParams);
         } catch (error) {
             console.error('Error fetching test cases:', error);
             setData([]);
+            setTotalRecords(0);
+            setTotalPages(1);
         } finally {
             setLoading(false);
         }
     };
 
-    // Fetch file status & detail list (non-blocking, runs in background)
-    const fetchStatus = async (page: number, limit: number) => {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://aicancer.io.vn/api';
+    // Initial load
+    useEffect(() => {
+        fetchData(currentPage, pageSize, searchTerm);
+    }, []);
 
-        // Fetch detail list first (list of patient IDs with results)
-        try {
-            const response = await fetch(`${baseUrl}/test-case/detail?page=${page}&limit=${limit}`);
-            if (response.ok) {
-                const data = await response.json();
-                setDetailList(Array.isArray(data) ? data : (data.IDTest || []));
-            } else {
-                setDetailList([]);
-            }
-        } catch (error) {
-            console.log('Detail list not available');
-            setDetailList([]);
-        }
-
-        // Fetch file status (may be slow/timeout)
-        try {
-            const response = await fetch(`${baseUrl}/test-case/file-name`);
-            if (response.ok) {
-                const raw = await response.json();
-                const statusMap: Record<string, { read1: boolean; read2: boolean }> = {};
-                if (Array.isArray(raw)) {
-                    raw.forEach((entry: any) => {
-                        if (typeof entry === 'string') {
-                            const m = entry.match(/^(.+?)_read(1|2)$/i);
-                            if (m) {
-                                if (!statusMap[m[1]]) statusMap[m[1]] = { read1: false, read2: false };
-                                if (m[2] === '1') statusMap[m[1]].read1 = true;
-                                if (m[2] === '2') statusMap[m[1]].read2 = true;
-                            }
-                        }
-                    });
-                }
-                setResultStatus(statusMap);
-            } else {
-                setResultStatus({});
-            }
-        } catch (error) {
-            console.log('File status not available');
-            setResultStatus({});
-        }
+    // Handle search submit
+    const handleSearch = () => {
+        setSearchTerm(searchInput);
+        setCurrentPage(1);
+        fetchData(1, pageSize, searchInput);
     };
 
-    useEffect(() => {
-        fetchData(currentPage, pageSize);
-        fetchStatus(currentPage, pageSize);
-    }, [currentPage, pageSize]);
+    // Clear search
+    const handleClearSearch = () => {
+        setSearchInput('');
+        setSearchTerm('');
+        setCurrentPage(1);
+        fetchData(1, pageSize, '');
+    };
 
-    // Search filter
-    const filteredData = useMemo(() => {
-        if (!searchTerm.trim()) return data;
-        const search = searchTerm.toLowerCase();
-        return data.filter(item =>
-            item.patientID?.toLowerCase().includes(search) ||
-            item.patientName?.toLowerCase().includes(search) ||
-            item.testName?.toLowerCase().includes(search)
-        );
-    }, [data, searchTerm]);
+    // Handle page change
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        fetchData(newPage, pageSize, searchTerm);
+    };
+
+    // Handle page size change
+    const handlePageSizeChange = (newSize: number) => {
+        setPageSize(newSize);
+        setCurrentPage(1);
+        fetchData(1, newSize, searchTerm);
+    };
 
     // Delete
     const handleDelete = async (id: string, patientID: string) => {
         if (!window.confirm(`Bạn muốn xóa xét nghiệm ID: ${patientID}?`)) return;
         try {
             await request.delete(`/test-case/delete/${id}`);
-            fetchData(currentPage, pageSize);
+            fetchData(currentPage, pageSize, searchTerm);
         } catch (error) {
             console.error('Error deleting:', error);
         }
@@ -147,7 +143,7 @@ const TestList = () => {
             await request.post('/test-case/add', newTest);
             setShowAddModal(false);
             setNewTest({ patientID: '', patientName: '', primaryTissue: '', testName: '' });
-            fetchData(currentPage, pageSize);
+            fetchData(currentPage, pageSize, searchTerm);
         } catch (error) {
             console.error('Error adding:', error);
         }
@@ -195,9 +191,7 @@ const TestList = () => {
             alert('Upload thành công!');
             setUploadModal(null);
             setUploadFile(null);
-
-            // Refresh status after upload
-            fetchStatus(currentPage, pageSize);
+            fetchData(currentPage, pageSize, searchTerm);
         } catch (error) {
             console.error('Error uploading:', error);
             alert('Upload thất bại!');
@@ -206,30 +200,17 @@ const TestList = () => {
         }
     };
 
-    // Close dropdown when clicking outside
-    const handleClickOutside = () => {
-        if (uploadDropdown) setUploadDropdown(null);
-    };
-
-    // Get status badge
-    const getStatusBadge = (patientID: string) => {
-        if (detailList.includes(patientID)) {
+    // Get status badge based on hasResult from aggregation
+    const getStatusBadge = (item: TestCase) => {
+        if (item.hasResult) {
             return (
                 <button
-                    onClick={() => navigate(`/tests/detail/${patientID}?page=${currentPage}&pageSize=${pageSize}`)}
+                    onClick={() => navigate(`/tests/detail/${item.patientID}?page=${currentPage}&pageSize=${pageSize}`)}
                     className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 rounded-lg text-xs font-medium hover:bg-green-200 transition-colors"
                 >
-                    Chi tiết
+                    Chi tiết ({item.resultCount || 0})
                 </button>
             );
-        }
-        const status = resultStatus[patientID];
-        if (status?.read1 && status?.read2) {
-            return <span className="px-3 py-1 bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-medium">Đang xử lý</span>;
-        } else if (status?.read1) {
-            return <span className="px-3 py-1 bg-teal-100 text-teal-700 border border-teal-200 rounded-lg text-xs font-medium">Đã thêm Read 1</span>;
-        } else if (status?.read2) {
-            return <span className="px-3 py-1 bg-teal-100 text-teal-700 border border-teal-200 rounded-lg text-xs font-medium">Đã thêm Read 2</span>;
         }
         return <span className="px-3 py-1 bg-yellow-100 text-yellow-700 border border-yellow-200 rounded-lg text-xs font-medium">Chưa có dữ liệu</span>;
     };
@@ -264,15 +245,36 @@ const TestList = () => {
                             type="text"
                             placeholder="Tìm kiếm theo mã hồ sơ, tên bệnh nhân..."
                             className="w-full pl-10 pr-4 py-2.5 border border-slate-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         />
                     </div>
-                    <button onClick={() => fetchData(currentPage, pageSize)} className="flex items-center gap-2 px-4 py-2.5 border border-slate-light rounded-lg hover:bg-slate-50">
+                    <button onClick={handleSearch} className="flex items-center gap-2 px-4 py-2.5 bg-teal-500 text-white rounded-lg hover:bg-teal-600">
+                        <Search className="w-4 h-4" />
+                        Tìm kiếm
+                    </button>
+                    {searchTerm && (
+                        <button onClick={handleClearSearch} className="flex items-center gap-2 px-4 py-2.5 border border-slate-light rounded-lg hover:bg-slate-50">
+                            <X className="w-4 h-4" />
+                            Xóa bộ lọc
+                        </button>
+                    )}
+                    <button onClick={() => fetchData(currentPage, pageSize, searchTerm)} className="flex items-center gap-2 px-4 py-2.5 border border-slate-light rounded-lg hover:bg-slate-50">
                         <RefreshCw className="w-4 h-4" />
                         Làm mới
                     </button>
                 </div>
+                {searchTerm && (
+                    <div className="mt-2 text-sm text-slate-medium">
+                        Đang tìm kiếm: <span className="font-medium text-teal-600">"{searchTerm}"</span>
+                    </div>
+                )}
+            </div>
+
+            {/* Results count */}
+            <div className="px-2 text-sm text-slate-medium">
+                Tổng số: <span className="font-semibold text-teal-700">{totalRecords}</span> xét nghiệm
             </div>
 
             {/* Table */}
@@ -297,15 +299,15 @@ const TestList = () => {
                                         <p className="text-slate-medium">Đang tải...</p>
                                     </td>
                                 </tr>
-                            ) : filteredData.length === 0 ? (
+                            ) : data.length === 0 ? (
                                 <tr>
                                     <td colSpan={6} className="text-center py-12">
                                         <FileText className="w-12 h-12 text-slate-light mx-auto mb-2" />
-                                        <p className="text-slate-medium">Chưa có xét nghiệm nào</p>
+                                        <p className="text-slate-medium">{searchTerm ? 'Không tìm thấy kết quả' : 'Chưa có xét nghiệm nào'}</p>
                                     </td>
                                 </tr>
                             ) : (
-                                filteredData.map((item) => (
+                                data.map((item) => (
                                     <tr key={item._id} className="border-b border-slate-light hover:bg-teal-50/30 transition-colors">
                                         <td className="py-3 px-4 text-sm font-medium text-slate-dark">{item.patientID}</td>
                                         <td className="py-3 px-4 text-sm text-slate-dark">{item.patientName}</td>
@@ -343,7 +345,7 @@ const TestList = () => {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <button onClick={() => handleDownload(item)} disabled={!detailList.includes(item.patientID)} className="p-2 text-green-600 hover:bg-green-100 rounded-md disabled:opacity-50" title="Tải xuống">
+                                                <button onClick={() => handleDownload(item)} disabled={!item.hasResult} className="p-2 text-green-600 hover:bg-green-100 rounded-md disabled:opacity-50" title="Tải xuống">
                                                     <Download className="w-4 h-4" />
                                                 </button>
                                                 <button onClick={() => handleDelete(item._id, item.patientID)} className="p-2 text-red-600 hover:bg-red-100 rounded-md" title="Xóa">
@@ -351,7 +353,7 @@ const TestList = () => {
                                                 </button>
                                             </div>
                                         </td>
-                                        <td className="py-3 px-4 text-center">{getStatusBadge(item.patientID)}</td>
+                                        <td className="py-3 px-4 text-center">{getStatusBadge(item)}</td>
                                     </tr>
                                 ))
                             )}
@@ -363,14 +365,14 @@ const TestList = () => {
                 <div className="flex items-center justify-between p-4 border-t border-slate-light">
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-slate-medium">Hiển thị</span>
-                        <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }} className="px-3 py-1.5 border border-slate-light rounded-md text-sm">
+                        <select value={pageSize} onChange={(e) => handlePageSizeChange(Number(e.target.value))} className="px-3 py-1.5 border border-slate-light rounded-md text-sm">
                             {pageSizeOptions.map(size => <option key={size} value={size}>{size}</option>)}
                         </select>
                         <span className="text-sm text-slate-medium">bản ghi / trang</span>
                     </div>
                     {totalPages > 1 && (
                         <div className="flex items-center gap-2">
-                            <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-md border border-slate-light hover:bg-teal-50 disabled:opacity-50">
+                            <button onClick={() => handlePageChange(Math.max(1, currentPage - 1))} disabled={currentPage === 1} className="p-2 rounded-md border border-slate-light hover:bg-teal-50 disabled:opacity-50">
                                 <ChevronLeft className="w-5 h-5" />
                             </button>
                             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -381,16 +383,19 @@ const TestList = () => {
                                     else num = currentPage - 2 + i;
                                 }
                                 return (
-                                    <button key={`page-${i}-${num}`} onClick={() => setCurrentPage(num)} className={`px-3 py-1.5 rounded-md text-sm font-medium ${currentPage === num ? 'bg-teal-500 text-white' : 'border border-slate-light hover:bg-teal-50'}`}>
+                                    <button key={`page-${i}-${num}`} onClick={() => handlePageChange(num)} className={`px-3 py-1.5 rounded-md text-sm font-medium ${currentPage === num ? 'bg-teal-500 text-white' : 'border border-slate-light hover:bg-teal-50'}`}>
                                         {num}
                                     </button>
                                 );
                             })}
-                            <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 rounded-md border border-slate-light hover:bg-teal-50 disabled:opacity-50">
+                            <button onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages} className="p-2 rounded-md border border-slate-light hover:bg-teal-50 disabled:opacity-50">
                                 <ChevronRight className="w-5 h-5" />
                             </button>
                         </div>
                     )}
+                    <div className="text-sm text-slate-medium">
+                        Trang {currentPage} / {totalPages}
+                    </div>
                 </div>
             </div>
 
@@ -436,8 +441,8 @@ const TestList = () => {
 
             {/* Upload Modal */}
             {uploadModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={handleClickOutside}>
-                    <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
                         <div className="p-6 border-b border-slate-light">
                             <h2 className="text-lg font-bold text-teal-900">
                                 Upload file - {uploadModal.readType === 'read1' ? 'Read 1' : 'Read 2'}
