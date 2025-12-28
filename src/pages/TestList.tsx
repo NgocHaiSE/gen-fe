@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
     Search, Plus, Trash2, Download, Upload, FileText, FlaskConical,
-    RefreshCw, ChevronLeft, ChevronRight, X
+    RefreshCw, ChevronLeft, ChevronRight, X, FolderPlus
 } from 'lucide-react';
 import request from '../utils/request';
+import AddToCollectionModal from '../components/AddToCollectionModal';
 
 // ==================== TYPES ====================
 interface TestCase {
@@ -52,6 +53,8 @@ const TestList = () => {
     const [uploadFile, setUploadFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [uploadDropdown, setUploadDropdown] = useState<string | null>(null);
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [showCollectionModal, setShowCollectionModal] = useState(false);
 
     const [newTest, setNewTest] = useState({ patientID: '', patientName: '', primaryTissue: '', testName: '' });
     const pageSizeOptions = [10, 20, 50, 100];
@@ -272,9 +275,31 @@ const TestList = () => {
                 )}
             </div>
 
-            {/* Results count */}
-            <div className="px-2 text-sm text-slate-medium">
-                Tổng số: <span className="font-semibold text-teal-700">{totalRecords}</span> xét nghiệm
+            {/* Results count and selection bar */}
+            <div className="px-2 flex items-center justify-between">
+                <span className="text-sm text-slate-medium">
+                    Tổng số: <span className="font-semibold text-teal-700">{totalRecords}</span> xét nghiệm
+                </span>
+                {selectedIds.length > 0 && (
+                    <div className="flex items-center gap-3">
+                        <span className="text-sm text-teal-700 font-medium">
+                            Đã chọn {selectedIds.length} xét nghiệm
+                        </span>
+                        <button
+                            onClick={() => setShowCollectionModal(true)}
+                            className="flex items-center gap-2 px-3 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors text-sm font-medium"
+                        >
+                            <FolderPlus className="w-4 h-4" />
+                            Thêm vào bộ sưu tập
+                        </button>
+                        <button
+                            onClick={() => setSelectedIds([])}
+                            className="px-3 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors text-sm"
+                        >
+                            Bỏ chọn
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Table */}
@@ -283,6 +308,21 @@ const TestList = () => {
                     <table className="w-full">
                         <thead>
                             <tr className="bg-teal-50 border-b border-slate-light">
+                                <th className="text-center py-3 px-3 w-12">
+                                    <input
+                                        type="checkbox"
+                                        checked={data.length > 0 && selectedIds.length === data.length}
+                                        onChange={(e) => {
+                                            e.stopPropagation();
+                                            if (e.target.checked) {
+                                                setSelectedIds(data.map(item => item.patientID));
+                                            } else {
+                                                setSelectedIds([]);
+                                            }
+                                        }}
+                                        className="w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500 cursor-pointer"
+                                    />
+                                </th>
                                 <th className="text-left py-3 px-4 text-sm font-semibold text-teal-900">Mã hồ sơ</th>
                                 <th className="text-left py-3 px-4 text-sm font-semibold text-teal-900">Tên bệnh nhân</th>
                                 <th className="text-left py-3 px-4 text-sm font-semibold text-teal-900">Mẫu mô</th>
@@ -294,21 +334,37 @@ const TestList = () => {
                         <tbody>
                             {loading ? (
                                 <tr>
-                                    <td colSpan={6} className="text-center py-12">
+                                    <td colSpan={7} className="text-center py-12">
                                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500 mx-auto mb-2"></div>
                                         <p className="text-slate-medium">Đang tải...</p>
                                     </td>
                                 </tr>
                             ) : data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="text-center py-12">
+                                    <td colSpan={7} className="text-center py-12">
                                         <FileText className="w-12 h-12 text-slate-light mx-auto mb-2" />
                                         <p className="text-slate-medium">{searchTerm ? 'Không tìm thấy kết quả' : 'Chưa có xét nghiệm nào'}</p>
                                     </td>
                                 </tr>
                             ) : (
                                 data.map((item) => (
-                                    <tr key={item._id} className="border-b border-slate-light hover:bg-teal-50/30 transition-colors">
+                                    <tr key={item.patientID} className="border-b border-slate-light hover:bg-teal-50/30 transition-colors">
+                                        <td className="py-3 px-3 text-center" onClick={(e) => e.stopPropagation()}>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedIds.includes(item.patientID)}
+                                                onChange={(e) => {
+                                                    e.stopPropagation();
+                                                    const itemId = item.patientID;
+                                                    if (e.target.checked) {
+                                                        setSelectedIds(prev => [...prev, itemId]);
+                                                    } else {
+                                                        setSelectedIds(prev => prev.filter(id => id !== itemId));
+                                                    }
+                                                }}
+                                                className="w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500 cursor-pointer"
+                                            />
+                                        </td>
                                         <td className="py-3 px-4 text-sm font-medium text-slate-dark">{item.patientID}</td>
                                         <td className="py-3 px-4 text-sm text-slate-dark">{item.patientName}</td>
                                         <td className="py-3 px-4">
@@ -486,6 +542,16 @@ const TestList = () => {
                     </div>
                 </div>
             )}
+
+            {/* Add to Collection Modal */}
+            <AddToCollectionModal
+                open={showCollectionModal}
+                onClose={() => {
+                    setShowCollectionModal(false);
+                    setSelectedIds([]);
+                }}
+                testCaseIds={selectedIds}
+            />
         </div>
     );
 };
