@@ -41,9 +41,9 @@ export default function Login() {
     return (
         <div className="w-full max-w-md animate-slide-up">
             <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/50 relative overflow-hidden">
-                {/* Decorative gradients */}
-                <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-400/20 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-teal-400/20 rounded-full blur-3xl pointer-events-none"></div>
+                {/* Decorative gradients - Updated to teal */}
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-400/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-teal-300/20 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div className="text-center mb-8 relative z-10">
                     <div className="flex justify-center mb-6">
@@ -51,57 +51,57 @@ export default function Login() {
                             <img alt="logo" src="/Logo_3.png" className="h-16 w-16 object-contain" />
                         </div>
                     </div>
-                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-medical-primary to-medical-secondary">
+                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-900 to-teal-500">
                         Ung Thư
                     </h1>
-                    <p className="text-gray-500 font-medium mt-2">Dữ liệu Gen & Y Học Chính Xác</p>
+                    <p className="text-slate-medium font-medium mt-2">Dữ liệu Gen & Y Học Chính Xác</p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-50/80 backdrop-blur-sm text-red-600 p-4 rounded-xl mb-6 text-sm border border-red-100 flex items-center shadow-sm animate-fade-in">
+                    <div className="bg-red-50/80 backdrop-blur-sm text-error-red p-4 rounded-xl mb-6 text-sm border border-red-100 flex items-center shadow-sm animate-fade-in">
                         <span className="mr-3 bg-red-100 p-1 rounded-full">⚠️</span> {error}
                     </div>
                 )}
 
                 <form onSubmit={handleLogin} className="space-y-5 relative z-10">
                     <div className="group">
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Tài khoản</label>
+                        <label className="block text-sm font-semibold text-slate-dark mb-1.5 ml-1">Tài khoản</label>
                         <div className="relative transition-all duration-300 transform group-focus-within:scale-[1.01]">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <User className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                                <User className="h-5 w-5 text-slate-light group-focus-within:text-teal-500 transition-colors" />
                             </div>
                             <input
                                 name="username"
                                 type="text"
                                 required
-                                className="block w-full pl-10 pr-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder-gray-400 font-medium text-gray-700"
+                                className="block w-full pl-10 pr-4 py-3 bg-white/50 border border-slate-light rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all placeholder-slate-medium font-medium text-slate-dark"
                                 placeholder="Nhập tên đăng nhập"
                             />
                         </div>
                     </div>
 
                     <div className="group">
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Mật khẩu</label>
+                        <label className="block text-sm font-semibold text-slate-dark mb-1.5 ml-1">Mật khẩu</label>
                         <div className="relative transition-all duration-300 transform group-focus-within:scale-[1.01]">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                                <Lock className="h-5 w-5 text-slate-light group-focus-within:text-teal-500 transition-colors" />
                             </div>
                             <input
                                 name="password"
                                 type="password"
                                 required
-                                className="block w-full pl-10 pr-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder-gray-400 font-medium text-gray-700"
+                                className="block w-full pl-10 pr-4 py-3 bg-white/50 border border-slate-light rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all placeholder-slate-medium font-medium text-slate-dark"
                                 placeholder="••••••••"
                             />
                         </div>
                     </div>
 
                     <div className="flex items-center justify-between text-sm pt-1">
-                        <label className="flex items-center text-gray-600 cursor-pointer hover:text-gray-800 transition-colors">
-                            <input type="checkbox" className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4" />
+                        <label className="flex items-center text-slate-medium cursor-pointer hover:text-slate-dark transition-colors">
+                            <input type="checkbox" className="mr-2 rounded border-slate-light text-teal-500 focus:ring-teal-500 w-4 h-4" />
                             <span className="font-medium">Ghi nhớ</span>
                         </label>
-                        <a href="#" className="font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-all">
+                        <a href="#" className="font-semibold text-teal-700 hover:text-teal-900 hover:underline transition-all">
                             Quên mật khẩu?
                         </a>
                     </div>
@@ -109,7 +109,7 @@ export default function Login() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-gradient-to-r from-[#1890ff] to-[#096dd9] hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed group"
+                        className="w-full bg-gradient-to-r from-teal-700 to-teal-500 hover:from-teal-800 hover:to-teal-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed group"
                     >
                         {loading ? (
                             <span className="flex items-center">
