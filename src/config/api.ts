@@ -47,3 +47,27 @@ export const getDrugsInfoEndpoint = (page = 1, limit = 10): string => {
 export const searchDrugsInfoEndpoint = (page = 1, limit = 10): string => {
     return `${API_SERVER}/drugs-information/search?page=${page}&limit=${limit}`;
 };
+
+// Gene Mutation (OncoKB) Endpoints
+export const getMutationEndpoint = (page = 1, limit = 10): string => {
+    return `${API_SERVER}/mutation?page=${page}&limit=${limit}`;
+};
+
+export const getMutationArticlesEndpoint = (id: string): string => {
+    return `${API_SERVER}/mutation/find/${id}`;
+};
+
+// Drug Therapy Endpoints (external API)
+export const DRUG_THERAPY_API = 'https://ut-project-be.vercel.app/api';
+
+export const getApprovedDrugsEndpoint = (page = 1): string => {
+    return `${DRUG_THERAPY_API}/approved-component?page=${page}`;
+};
+
+export const getNotApprovedDrugsEndpoint = (page = 1): string => {
+    return `${DRUG_THERAPY_API}/not-approved-component?page=${page}`;
+};
+
+export const getFDADrugsEndpoint = (page = 1): string => {
+    return `${DRUG_THERAPY_API}/fda-medicine?page=${page}`;
+};

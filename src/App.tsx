@@ -23,6 +23,9 @@ import HealthRecordDetail from './pages/HealthRecordDetail.tsx'
 import TestList from './pages/TestList.tsx'
 import TestDetail from './pages/TestDetail.tsx'
 import PredictionDrugDetail from './pages/PredictionDrugDetail.tsx'
+import GeneralGeneInfo from './pages/GeneralGeneInfo.tsx'
+import GeneralDrugInfo from './pages/GeneralDrugInfo.tsx'
+import DrugTherapy from './pages/DrugTherapy.tsx'
 
 
 
@@ -113,6 +116,13 @@ function App() {
                 <Route path="patient-management">
                     <Route path="patient-information" element={<PatientManagement />} />
                     <Route path="patient-list" element={<PatientList type="all" />} />
+                </Route>
+
+                {/* Thông tin chung (General Information) Routes */}
+                <Route path="over-view">
+                    <Route path="gene-mutation" element={<GeneralGeneInfo />} />
+                    <Route path="drug" element={<GeneralDrugInfo />} />
+                    <Route path="drugtest" element={<DrugTherapy />} />
                 </Route>
 
                 {/* Dev Teams */}
