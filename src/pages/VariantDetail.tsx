@@ -227,18 +227,18 @@ const VariantDetail: React.FC = () => {
                         <div className="p-0">
                             <table className="w-full text-sm">
                                 <tbody>
-                                    <tr className="border-b border-slate-100">
-                                        <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-100">Mã hồ sơ</td>
+                                    <tr className="border-b border-slate-300">
+                                        <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-300">Mã hồ sơ</td>
                                         <td className="px-4 py-3">
                                             <CopyableText text={patientInfo.patientID} field="patientID" />
                                         </td>
-                                        <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-100">Tên bệnh nhân</td>
+                                        <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-300">Tên bệnh nhân</td>
                                         <td className="px-4 py-3 font-semibold">{patientInfo.patientName}</td>
                                     </tr>
-                                    <tr className="border-b border-slate-100">
+                                    <tr className="border-b border-slate-300">
                                         {tissueInfo && (
                                             <>
-                                                <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-100">Mẫu mô</td>
+                                                <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-300">Mẫu mô</td>
                                                 <td className="px-4 py-3">
                                                     <span className={`inline-block px-3 py-1 rounded border text-sm font-medium ${tissueInfo.bgColor} ${tissueInfo.textColor} ${tissueInfo.borderColor}`}>
                                                         {tissueInfo.name}
@@ -246,12 +246,12 @@ const VariantDetail: React.FC = () => {
                                                 </td>
                                             </>
                                         )}
-                                        <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-100">Mẫu bệnh phẩm</td>
+                                        <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-300">Mẫu bệnh phẩm</td>
                                         <td className="px-4 py-3">{patientInfo.testName}</td>
                                     </tr>
                                     {patientInfo.createAt && (
                                         <tr>
-                                            <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-100">Ngày tạo</td>
+                                            <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-300">Ngày tạo</td>
                                             <td className="px-4 py-3" colSpan={3}>{new Date(patientInfo.createAt).toLocaleString('vi-VN')}</td>
                                         </tr>
                                     )}
@@ -273,19 +273,19 @@ const VariantDetail: React.FC = () => {
 
                     {/* Thông tin vị trí */}
                     <div className="border-b border-slate-200">
-                        <div className="px-6 py-3 bg-slate-50 border-b border-slate-100">
+                        <div className="px-6 py-3 bg-slate-50 border-b border-slate-300">
                             <h4 className="text-sm font-semibold text-slate-700">Thông tin vị trí</h4>
                         </div>
                         <table className="w-full text-sm">
                             <tbody>
-                                <tr className="border-b border-slate-100">
-                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/6 border-r border-slate-100">Chromosome</td>
+                                <tr className="border-b border-slate-300">
+                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/6 border-r border-slate-300">Chromosome</td>
                                     <td className="px-4 py-3 font-semibold">{variant.Chromosome}</td>
-                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/6 border-r border-slate-100">Position</td>
+                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/6 border-r border-slate-300">Position</td>
                                     <td className="px-4 py-3">
                                         <CopyableText text={variant.Position} field="position" isCode />
                                     </td>
-                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/6 border-r border-slate-100">RS ID</td>
+                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/6 border-r border-slate-300">RS ID</td>
                                     <td className="px-4 py-3">
                                         <CopyableText text={variant.RS_ID} field="rsId" isCode />
                                     </td>
@@ -296,21 +296,21 @@ const VariantDetail: React.FC = () => {
 
                     {/* Thông tin biến đổi */}
                     <div className="border-b border-slate-200">
-                        <div className="px-6 py-3 bg-slate-50 border-b border-slate-100">
+                        <div className="px-6 py-3 bg-slate-50 border-b border-slate-300">
                             <h4 className="text-sm font-semibold text-slate-700">Thông tin biến đổi</h4>
                         </div>
                         <table className="w-full text-sm">
                             <tbody>
-                                <tr className="border-b border-slate-100">
-                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-100 align-top">Nucleotide Change</td>
+                                <tr className="border-b border-slate-300">
+                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-300 align-top">Nucleotide Change</td>
                                     <td className="px-4 py-3">
                                         <code className="block bg-slate-100 px-3 py-2 rounded text-sm font-mono break-all">
                                             {variant.Nucleotide}
                                         </code>
                                     </td>
                                 </tr>
-                                <tr className="border-b border-slate-100">
-                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-100 align-top">Protein Change</td>
+                                <tr className="border-b border-slate-300">
+                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-300 align-top">Protein Change</td>
                                     <td className="px-4 py-3">
                                         <code className="block bg-slate-100 px-3 py-2 rounded text-sm font-mono break-all">
                                             {variant.Protein || '-'}
@@ -318,7 +318,7 @@ const VariantDetail: React.FC = () => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-100">Variant Type</td>
+                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 border-r border-slate-300">Variant Type</td>
                                     <td className="px-4 py-3">
                                         <span className={`inline-block px-3 py-1 rounded border text-sm font-medium ${typeInfo.bgColor} ${typeInfo.textColor} ${typeInfo.borderColor}`}>
                                             {typeInfo.text}
@@ -331,17 +331,17 @@ const VariantDetail: React.FC = () => {
 
                     {/* Thông tin định lượng */}
                     <div>
-                        <div className="px-6 py-3 bg-slate-50 border-b border-slate-100">
+                        <div className="px-6 py-3 bg-slate-50 border-b border-slate-300">
                             <h4 className="text-sm font-semibold text-slate-700">Thông tin định lượng</h4>
                         </div>
                         <table className="w-full text-sm">
                             <tbody>
                                 <tr>
-                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-100">Read Depth (Độ sâu đọc)</td>
+                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-300">Read Depth (Độ sâu đọc)</td>
                                     <td className="px-4 py-3">
                                         <span className="font-bold text-base text-teal-600">{variant.ReadDepth}x</span>
                                     </td>
-                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-100">Variant Rate</td>
+                                    <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-300">Variant Rate</td>
                                     <td className="px-4 py-3">
                                         <span className="font-bold text-base text-green-600">
                                             {variant.VariantRate != null && !isNaN(Number(variant.VariantRate))
