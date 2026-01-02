@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { User, LogOut, Settings, ChevronDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { removeToken } from '../utils/token'
+import logo from '../assets/Logo_2.png'
 
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false)
@@ -17,7 +18,7 @@ export default function Header() {
             {/* Logo and Title */}
             <div className="flex items-center">
                 <div className="w-7 h-7 mr-2 bg-white rounded flex items-center justify-center overflow-hidden p-0.5">
-                    <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+                    <img src={logo} alt="Logo" className="w-full h-full object-contain" />
                 </div>
                 <h1 className="text-base font-semibold tracking-wide text-white">UNG THƯ</h1>
             </div>

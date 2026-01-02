@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Lock, User, ArrowRight } from 'lucide-react'
 import { login, currentUser } from '../services/auth'
 import token from '../utils/token'
+import logo from '../assets/Logo_2.png'
 
 export default function Login() {
     const navigate = useNavigate()
@@ -47,8 +48,8 @@ export default function Login() {
 
                 <div className="text-center mb-8 relative z-10">
                     <div className="flex justify-center mb-6">
-                        <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 transition-transform hover:rotate-0 duration-300">
-                            <img alt="logo" src="/Logo_3.png" className="h-16 w-16 object-contain" />
+                        <div className="transform hover:scale-105 transition-transform duration-300">
+                            <img alt="logo" src={logo} className="h-32 w-auto object-contain" />
                         </div>
                     </div>
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-900 to-teal-500">
@@ -129,9 +130,6 @@ export default function Login() {
                 </form>
             </div>
 
-            <p className="text-center text-white/80 mt-8 text-sm font-medium drop-shadow-md">
-                © {new Date().getFullYear()} Cancer Genomics Portal. All rights reserved.
-            </p>
         </div>
     )
 }

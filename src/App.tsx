@@ -4,6 +4,7 @@ import RequireAuth from './components/RequireAuth.tsx'
 import AuthLayout from './layouts/AuthLayout.tsx'
 import Login from './pages/Login.tsx'
 import Dashboard from './pages/Dashboard.tsx'
+import Home from './pages/Home.tsx'
 import Overview from './pages/Overview.tsx'
 import PatientDetail from './pages/PatientDetail.tsx'
 import NotFound from './pages/NotFound.tsx'
@@ -13,8 +14,6 @@ import OtherTreatment from './pages/OtherTreatment.tsx'
 import Article from './pages/Article.tsx'
 import HealthRecord from './pages/HealthRecord.tsx'
 import Statistics from './pages/Statistics.tsx'
-import PatientManagement from './pages/PatientManagement.tsx'
-import PatientList from './pages/PatientList.tsx'
 import Collections from './pages/Collections.tsx'
 import CollectionDetail from './pages/CollectionDetail.tsx'
 import VariantDetail from './pages/VariantDetail.tsx'
@@ -26,6 +25,10 @@ import PredictionDrugDetail from './pages/PredictionDrugDetail.tsx'
 import GeneralGeneInfo from './pages/GeneralGeneInfo.tsx'
 import GeneralDrugInfo from './pages/GeneralDrugInfo.tsx'
 import DrugTherapy from './pages/DrugTherapy.tsx'
+import DNALibrary from './pages/DNALibrary.tsx'
+import MedicinesList from './pages/MedicinesList.tsx'
+import CosmicSamples from './pages/CosmicSamples.tsx'
+import CosmicSampleDetail from './pages/CosmicSampleDetail.tsx'
 
 
 
@@ -41,7 +44,8 @@ function App() {
                     <DashboardLayout />
                 </RequireAuth>
             }>
-                <Route index element={<Navigate to="/welcome" replace />} />
+                <Route index element={<Navigate to="/home" replace />} />
+                <Route path="home" element={<Home />} />
                 <Route path="welcome" element={<Dashboard />} />
 
                 {/* Cancer Routes - explicit for now to match menu */}
@@ -112,18 +116,22 @@ function App() {
                     <Route path="prediction-drug/:patientId" element={<PredictionDrugDetail />} />
                 </Route>
 
-                {/* Patient Management Routes */}
-                <Route path="patient-management">
-                    <Route path="patient-information" element={<PatientManagement />} />
-                    <Route path="patient-list" element={<PatientList type="all" />} />
-                </Route>
-
                 {/* Thông tin chung (General Information) Routes */}
                 <Route path="over-view">
                     <Route path="gene-mutation" element={<GeneralGeneInfo />} />
                     <Route path="drug" element={<GeneralDrugInfo />} />
                     <Route path="drugtest" element={<DrugTherapy />} />
                 </Route>
+
+                {/* DNA Library */}
+                <Route path="dna-library" element={<DNALibrary />} />
+
+                {/* Medicines List */}
+                <Route path="medicines-list" element={<MedicinesList />} />
+
+                {/* Cosmic Samples */}
+                <Route path="cosmic-samples" element={<CosmicSamples />} />
+                <Route path="cosmic-samples/:sampleId" element={<CosmicSampleDetail />} />
 
                 {/* Dev Teams */}
                 <Route path="dev-teams" element={<DevTeams />} />

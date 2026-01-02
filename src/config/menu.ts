@@ -3,15 +3,29 @@ import {
     Activity,
     FileText,
     FlaskConical,
-    Baby
+    Home,
+    Stethoscope,
+    Heart,
+    HeartPulse,
+    Ribbon,
+    Info,
+    BookOpen,
+    Database,
+    Code2,
+    Pill
 } from 'lucide-react'
 
 // Mapping icons is manual since we are switching to lucide-react
 export const menuConfig = [
     {
+        path: '/home',
+        name: 'Trang chủ',
+        icon: Home
+    },
+    {
         path: '/welcome',
         name: 'Giới thiệu',
-        icon: Activity
+        icon: Info
     },
     {
         path: '/user-manager',
@@ -26,7 +40,6 @@ export const menuConfig = [
         children: [
             { path: '/lung-cancer/overview', name: 'Tổng quan' },
             { path: '/lung-cancer/gene-mutation', name: 'Gen đột biến' },
-            { path: '/lung-cancer/epidemiology', name: 'Dịch tễ' },
             { path: '/lung-cancer/article', name: 'Bài báo liên quan' },
             { path: '/lung-cancer/drug', name: 'Thuốc điều trị' },
             { path: '/lung-cancer/other-treatment', name: 'Các điều trị khác' },
@@ -36,7 +49,7 @@ export const menuConfig = [
     {
         path: '/liver-cancer',
         name: 'Ung thư gan',
-        icon: Activity,
+        icon: Stethoscope,
         children: [
             { path: '/liver-cancer/overview', name: 'Tổng quan' },
             { path: '/liver-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -49,7 +62,7 @@ export const menuConfig = [
     {
         path: '/breast-cancer',
         name: 'Ung thư vú',
-        icon: Baby, // Approximate
+        icon: Ribbon,
         children: [
             { path: '/breast-cancer/overview', name: 'Tổng quan' },
             { path: '/breast-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -62,7 +75,7 @@ export const menuConfig = [
     {
         path: '/thyroid-cancer',
         name: 'Ung thư tuyến giáp',
-        icon: Activity,
+        icon: Heart,
         children: [
             { path: '/thyroid-cancer/overview', name: 'Tổng quan' },
             { path: '/thyroid-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -75,7 +88,7 @@ export const menuConfig = [
     {
         path: '/colorectal-cancer',
         name: 'Ung thư đại trực tràng',
-        icon: Activity,
+        icon: HeartPulse,
         children: [
             { path: '/colorectal-cancer/overview', name: 'Tổng quan' },
             { path: '/colorectal-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -96,18 +109,9 @@ export const menuConfig = [
         ]
     },
     {
-        path: '/patient-management',
-        name: 'Quản lý bệnh nhân',
-        icon: Users,
-        children: [
-            { path: '/patient-management/patient-information', name: 'Thêm thông tin bệnh nhân' },
-            { path: '/patient-management/patient-list', name: 'Danh sách bệnh nhân' },
-        ]
-    },
-    {
         path: '/over-view',
         name: 'Thông tin chung',
-        icon: FileText,
+        icon: Database,
         children: [
             { path: '/over-view/gene-mutation', name: 'Chuyên gia gen đột biến' },
             { path: '/over-view/drug', name: 'Chuyên gia điều trị đích' },
@@ -117,6 +121,6 @@ export const menuConfig = [
     {
         path: '/dev-teams',
         name: 'Nhóm phát triển',
-        icon: Users
+        icon: Code2
     }
 ]

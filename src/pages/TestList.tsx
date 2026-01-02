@@ -265,7 +265,7 @@ const TestList = () => {
                     onClick={() => navigate(`/tests/detail/${item.patientID}?page=${currentPage}&pageSize=${pageSize}`)}
                     className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 rounded-lg text-xs font-medium hover:bg-green-200 transition-colors"
                 >
-                    Chi tiết ({item.resultCount || 0})
+                    Chi tiết
                 </button>
             );
         }

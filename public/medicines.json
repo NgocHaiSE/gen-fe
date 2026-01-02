@@ -1,0 +1,342 @@
+[
+  {
+    "STT": 1,
+    "VN phê duyệt": "Afatinib",
+    "FDA phê duyệt": "Abemaciclib (Verzenio)"
+  },
+  {
+    "STT": 2,
+    "VN phê duyệt": "Alectinib",
+    "FDA phê duyệt": "Adagrasib (Krazati)"
+  },
+  {
+    "STT": 3,
+    "VN phê duyệt": "Axitinib",
+    "FDA phê duyệt": "Ado-trastuzumab emtansine (Kadcyla)"
+  },
+  {
+    "STT": 4,
+    "VN phê duyệt": "Bevacizumab",
+    "FDA phê duyệt": "Afatinib"
+  },
+  {
+    "STT": 5,
+    "VN phê duyệt": "Bortezomib",
+    "FDA phê duyệt": "Alectinib"
+  },
+  {
+    "STT": 6,
+    "VN phê duyệt": "Brentuximab vedotin",
+    "FDA phê duyệt": "Alpelisib"
+  },
+  {
+    "STT": 7,
+    "VN phê duyệt": "Ceritinib",
+    "FDA phê duyệt": "Amivantamab-vmjw (Rybrevant)"
+  },
+  {
+    "STT": 8,
+    "VN phê duyệt": "Cetuximab",
+    "FDA phê duyệt": "Apelisib"
+  },
+  {
+    "STT": 9,
+    "VN phê duyệt": "Daratumumab",
+    "FDA phê duyệt": "Axitinib"
+  },
+  {
+    "STT": 10,
+    "VN phê duyệt": "Erlotinib",
+    "FDA phê duyệt": "Bevacizumab"
+  },
+  {
+    "STT": 11,
+    "VN phê duyệt": "Gefitinib",
+    "FDA phê duyệt": "Bortezomib"
+  },
+  {
+    "STT": 12,
+    "VN phê duyệt": "Imatinib",
+    "FDA phê duyệt": "Brentuximab vedotin"
+  },
+  {
+    "STT": 13,
+    "VN phê duyệt": "Ibrutinib",
+    "FDA phê duyệt": "Brigatinib (Alunbrig)"
+  },
+  {
+    "STT": 14,
+    "VN phê duyệt": "Lapatinib",
+    "FDA phê duyệt": "Cabozantinib"
+  },
+  {
+    "STT": 15,
+    "VN phê duyệt": "Lenvatinib",
+    "FDA phê duyệt": "Capmatinib hydrochloride (Tabrecta)"
+  },
+  {
+    "STT": 16,
+    "VN phê duyệt": "Nilotinib",
+    "FDA phê duyệt": "Ceritinib (Zykadia)"
+  },
+  {
+    "STT": 17,
+    "VN phê duyệt": "Nimotuzumab",
+    "FDA phê duyệt": "Cetuximab"
+  },
+  {
+    "STT": 18,
+    "VN phê duyệt": "Olaparib",
+    "FDA phê duyệt": "Cetuximab"
+  },
+  {
+    "STT": 19,
+    "VN phê duyệt": "Osimertinib",
+    "FDA phê duyệt": "Crizotinib (Xalkori)"
+  },
+  {
+    "STT": 20,
+    "VN phê duyệt": "Pazopanib",
+    "FDA phê duyệt": "Dabrafenib mesylate (Tafinlar)"
+  },
+  {
+    "STT": 21,
+    "VN phê duyệt": "Regorafenib",
+    "FDA phê duyệt": "Dacomitinib (Vizimpro)"
+  },
+  {
+    "STT": 22,
+    "VN phê duyệt": "Rituximab",
+    "FDA phê duyệt": "Daratumumab"
+  },
+  {
+    "STT": 23,
+    "VN phê duyệt": "Ramucirumab",
+    "FDA phê duyệt": "Encorafenib (Braftovi)"
+  },
+  {
+    "STT": 24,
+    "VN phê duyệt": "Ruxolitinib",
+    "FDA phê duyệt": "Entrectinib (Rozlytrek)"
+  },
+  {
+    "STT": 25,
+    "VN phê duyệt": "Sorafenib",
+    "FDA phê duyệt": "Erlotinib"
+  },
+  {
+    "STT": 26,
+    "VN phê duyệt": "Sunitinib",
+    "FDA phê duyệt": "Erlotinib hydrochloride (Tarceva)"
+  },
+  {
+    "STT": 27,
+    "VN phê duyệt": "Trastuzumab",
+    "FDA phê duyệt": "Fam-trastuzumab deruxtecan-nxki (Enhertu)"
+  },
+  {
+    "STT": 28,
+    "VN phê duyệt": "Trastuzumab emtansine",
+    "FDA phê duyệt": "Gefitinib "
+  },
+  {
+    "STT": 29,
+    "VN phê duyệt": "Apelisib",
+    "FDA phê duyệt": "Ibrutinib"
+  },
+  {
+    "STT": 30,
+    "VN phê duyệt": "Palbociclib",
+    "FDA phê duyệt": "Imatinib"
+  },
+  {
+    "STT": 31,
+    "VN phê duyệt": "Ribociclib",
+    "FDA phê duyệt": "Lapatinib"
+  },
+  {
+    "STT": 32,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Lapatinib ditosylate (Tykerb)"
+  },
+  {
+    "STT": 33,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Larotrectinib"
+  },
+  {
+    "STT": 34,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Lenvatinib"
+  },
+  {
+    "STT": 35,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Lorlatinib (Lorbrena)"
+  },
+  {
+    "STT": 36,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Margetuximab-cmkb (Margenza)"
+  },
+  {
+    "STT": 37,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Mobocertinib succinate (Exkivity)"
+  },
+  {
+    "STT": 38,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Necitumumab (Portrazza)"
+  },
+  {
+    "STT": 39,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Neratinib maleate (Nerlynx)"
+  },
+  {
+    "STT": 40,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Nilotinib"
+  },
+  {
+    "STT": 41,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Nimotuzumab"
+  },
+  {
+    "STT": 42,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Olaparib "
+  },
+  {
+    "STT": 43,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Osimertinib"
+  },
+  {
+    "STT": 44,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Osimertinib mesylate (Tagrisso)"
+  },
+  {
+    "STT": 45,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Palbociclib "
+  },
+  {
+    "STT": 46,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Panitumumab (Vectibix)"
+  },
+  {
+    "STT": 47,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Pazopanib"
+  },
+  {
+    "STT": 48,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Pertuzumab (Perjeta)"
+  },
+  {
+    "STT": 49,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Pralsetinib (Gavreto)"
+  },
+  {
+    "STT": 50,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Ramucirumab"
+  },
+  {
+    "STT": 51,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Ramucirumab "
+  },
+  {
+    "STT": 52,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Regorafenib "
+  },
+  {
+    "STT": 53,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Ribociclib "
+  },
+  {
+    "STT": 54,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Rituximab"
+  },
+  {
+    "STT": 55,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Ruxolitinib"
+  },
+  {
+    "STT": 56,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Sacituzumab govitecan-hziy (Trodelvy)"
+  },
+  {
+    "STT": 57,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Selpercatinib"
+  },
+  {
+    "STT": 58,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Sorafenib (Nexavar)"
+  },
+  {
+    "STT": 59,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Sotorasib (Lumakras)"
+  },
+  {
+    "STT": 60,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Sunitinib"
+  },
+  {
+    "STT": 61,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Talazoparib tosylate (Talzenna)"
+  },
+  {
+    "STT": 62,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Tepotinib hydrochloride (Tepmetko)"
+  },
+  {
+    "STT": 63,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Trametinib dimethyl sulfoxide (Mekinist)"
+  },
+  {
+    "STT": 64,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Trastuzumab"
+  },
+  {
+    "STT": 65,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Tucatinib (Tukysa)"
+  },
+  {
+    "STT": 66,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Vandetanib (Caprelsa)"
+  },
+  {
+    "STT": 67,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Vemurafenib"
+  },
+  {
+    "STT": 68,
+    "VN phê duyệt": null,
+    "FDA phê duyệt": "Ziv-aflibercept (Zaltrap)"
+  }
+]

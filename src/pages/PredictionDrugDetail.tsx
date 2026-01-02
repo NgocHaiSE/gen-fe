@@ -136,7 +136,7 @@ const PredictionDrugDetail: React.FC = () => {
 
             {/* Header */}
             <div className="mb-4">
-                <h1 className="text-xl font-bold text-slate-800 mb-1">Thuốc điều trị đích</h1>
+                <h1 className="text-xl font-bold text-teal-900 mb-1">Thuốc điều trị đích</h1>
                 <p className="text-sm text-slate-500">Tổng hợp {totalItems} kết quả</p>
             </div>
 

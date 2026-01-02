@@ -1,0 +1,1241 @@
+[
+  {
+    "STT": 1,
+    "GEN": "ERBB2",
+    "STT NST": 17,
+    "START": 39688094,
+    "END": 39728658
+  },
+  {
+    "STT": 2,
+    "GEN": "RB1",
+    "STT NST": 13,
+    "START": 48303751,
+    "END": 48481890
+  },
+  {
+    "STT": 3,
+    "GEN": "NF2",
+    "STT NST": 22,
+    "START": 29603556,
+    "END": 29698600
+  },
+  {
+    "STT": 4,
+    "GEN": "IGF1R",
+    "STT NST": 15,
+    "START": 98648539,
+    "END": 98964530
+  },
+  {
+    "STT": 5,
+    "GEN": "CCND1",
+    "STT NST": 11,
+    "START": 69641156,
+    "END": 69654474
+  },
+  {
+    "STT": 6,
+    "GEN": "BIRC5",
+    "STT NST": 17,
+    "START": 78214253,
+    "END": 78225635
+  },
+  {
+    "STT": 7,
+    "GEN": "FGFR1",
+    "STT NST": 8,
+    "START": 38411143,
+    "END": 38468635
+  },
+  {
+    "STT": 8,
+    "GEN": "CDKN2A",
+    "STT NST": 9,
+    "START": 21967752,
+    "END": 21995324
+  },
+  {
+    "STT": 9,
+    "GEN": "PIK3CA",
+    "STT NST": 3,
+    "START": 179148126,
+    "END": 179240093
+  },
+  {
+    "STT": 10,
+    "GEN": "ESR1",
+    "STT NST": 6,
+    "START": 151656672,
+    "END": 152129619
+  },
+  {
+    "STT": 11,
+    "GEN": "PTEN",
+    "STT NST": 10,
+    "START": 87863625,
+    "END": 87971930
+  },
+  {
+    "STT": 12,
+    "GEN": "NTRK3",
+    "STT NST": 15,
+    "START": 87859751,
+    "END": 88256739
+  },
+  {
+    "STT": 13,
+    "GEN": "BRCA2",
+    "STT NST": 13,
+    "START": 32315508,
+    "END": 32400268
+  },
+  {
+    "STT": 14,
+    "GEN": "TP53",
+    "STT NST": 17,
+    "START": 7668421,
+    "END": 7687490
+  },
+  {
+    "STT": 15,
+    "GEN": "FGFR2",
+    "STT NST": 10,
+    "START": 121478330,
+    "END": 121598458
+  },
+  {
+    "STT": 16,
+    "GEN": "MMP2",
+    "STT NST": 16,
+    "START": 55478830,
+    "END": 55506691
+  },
+  {
+    "STT": 17,
+    "GEN": "CDK6",
+    "STT NST": 7,
+    "START": 92604921,
+    "END": 92836573
+  },
+  {
+    "STT": 18,
+    "GEN": "AKT1",
+    "STT NST": 14,
+    "START": 104769349,
+    "END": 104795748
+  },
+  {
+    "STT": 19,
+    "GEN": "CDK4",
+    "STT NST": 12,
+    "START": 57747727,
+    "END": 57752310
+  },
+  {
+    "STT": 20,
+    "GEN": "CYP2D6",
+    "STT NST": 22,
+    "START": 42126499,
+    "END": 42130810
+  },
+  {
+    "STT": 21,
+    "GEN": "ATM",
+    "STT NST": 11,
+    "START": 108223067,
+    "END": 108369102
+  },
+  {
+    "STT": 22,
+    "GEN": "CHEK2",
+    "STT NST": 22,
+    "START": 28687743,
+    "END": 28741834
+  },
+  {
+    "STT": 23,
+    "GEN": "EGFR",
+    "STT NST": 7,
+    "START": 55019017,
+    "END": 55211628
+  },
+  {
+    "STT": 24,
+    "GEN": "ERBB3",
+    "STT NST": 12,
+    "START": 56080108,
+    "END": 56103505
+  },
+  {
+    "STT": 25,
+    "GEN": "CHEK1",
+    "STT NST": 11,
+    "START": 125625136,
+    "END": 125681124
+  },
+  {
+    "STT": 26,
+    "GEN": "FGFR3",
+    "STT NST": 4,
+    "START": 1793293,
+    "END": 1808867
+  },
+  {
+    "STT": 27,
+    "GEN": "MAP2K1",
+    "STT NST": 15,
+    "START": 66386912,
+    "END": 66491544
+  },
+  {
+    "STT": 28,
+    "GEN": "CDK12",
+    "STT NST": 17,
+    "START": 39461486,
+    "END": 39567559
+  },
+  {
+    "STT": 29,
+    "GEN": "ALK",
+    "STT NST": 2,
+    "START": 29192774,
+    "END": 29921586
+  },
+  {
+    "STT": 30,
+    "GEN": "BCL2",
+    "STT NST": 18,
+    "START": 63123346,
+    "END": 63320090
+  },
+  {
+    "STT": 31,
+    "GEN": "NF1",
+    "STT NST": 17,
+    "START": 31094927,
+    "END": 31377677
+  },
+  {
+    "STT": 32,
+    "GEN": "MTOR",
+    "STT NST": 1,
+    "START": 11106535,
+    "END": 11262551
+  },
+  {
+    "STT": 33,
+    "GEN": "RET",
+    "STT NST": 10,
+    "START": 43077069,
+    "END": 43130351
+  },
+  {
+    "STT": 34,
+    "GEN": "PDGFRB",
+    "STT NST": 5,
+    "START": 150113839,
+    "END": 150155845
+  },
+  {
+    "STT": 35,
+    "GEN": "BRAF",
+    "STT NST": 7,
+    "START": 140713328,
+    "END": 140924929
+  },
+  {
+    "STT": 36,
+    "GEN": "KRAS",
+    "STT NST": 12,
+    "START": 25205246,
+    "END": 25250929
+  },
+  {
+    "STT": 37,
+    "GEN": "BRIP1",
+    "STT NST": 17,
+    "START": 61679139,
+    "END": 61863528
+  },
+  {
+    "STT": 38,
+    "GEN": "PALB2",
+    "STT NST": 16,
+    "START": 23603165,
+    "END": 23641310
+  },
+  {
+    "STT": 39,
+    "GEN": "MET",
+    "STT NST": 7,
+    "START": 116672196,
+    "END": 116798377
+  },
+  {
+    "STT": 40,
+    "GEN": "ERBB4",
+    "STT NST": 2,
+    "START": 211375717,
+    "END": 212538802
+  },
+  {
+    "STT": 41,
+    "GEN": "FGFR4",
+    "STT NST": 5,
+    "START": 177086915,
+    "END": 177098144
+  },
+  {
+    "STT": 42,
+    "GEN": "NOTCH1",
+    "STT NST": 9,
+    "START": 136494433,
+    "END": 136546048
+  },
+  {
+    "STT": 43,
+    "GEN": "KIT",
+    "STT NST": 4,
+    "START": 54657957,
+    "END": 54740715
+  },
+  {
+    "STT": 44,
+    "GEN": "JAK2",
+    "STT NST": 9,
+    "START": 4984390,
+    "END": 5129948
+  },
+  {
+    "STT": 45,
+    "GEN": "STK11",
+    "STT NST": 19,
+    "START": 1205778,
+    "END": 1228431
+  },
+  {
+    "STT": 46,
+    "GEN": "ERCC1",
+    "STT NST": 19,
+    "START": 45407334,
+    "END": 45451547
+  },
+  {
+    "STT": 47,
+    "GEN": "GNAS",
+    "STT NST": 20,
+    "START": 58839748,
+    "END": 58911192
+  },
+  {
+    "STT": 48,
+    "GEN": "AURKA",
+    "STT NST": 20,
+    "START": 56369390,
+    "END": 56392215
+  },
+  {
+    "STT": 49,
+    "GEN": "DDR2",
+    "STT NST": 1,
+    "START": 162630863,
+    "END": 162787405
+  },
+  {
+    "STT": 50,
+    "GEN": "NFE2L2",
+    "STT NST": 2,
+    "START": 177230303,
+    "END": 177264727
+  },
+  {
+    "STT": 51,
+    "GEN": "ERCC2",
+    "STT NST": 19,
+    "START": 45349837,
+    "END": 45370573
+  },
+  {
+    "STT": 52,
+    "GEN": "ROS1",
+    "STT NST": 6,
+    "START": 117287353,
+    "END": 117425942
+  },
+  {
+    "STT": 53,
+    "GEN": "NTRK1",
+    "STT NST": 1,
+    "START": 156815750,
+    "END": 156881850
+  },
+  {
+    "STT": 54,
+    "GEN": "RRM1",
+    "STT NST": 11,
+    "START": 4094685,
+    "END": 4138932
+  },
+  {
+    "STT": 55,
+    "GEN": "AXL",
+    "STT NST": 19,
+    "START": 41219223,
+    "END": 41261766
+  },
+  {
+    "STT": 56,
+    "GEN": "BCL2L1",
+    "STT NST": 20,
+    "START": 31664452,
+    "END": 31723963
+  },
+  {
+    "STT": 57,
+    "GEN": "PDGFRA",
+    "STT NST": 4,
+    "START": 54229293,
+    "END": 54298245
+  },
+  {
+    "STT": 58,
+    "GEN": "FLT1",
+    "STT NST": 13,
+    "START": 28300346,
+    "END": 28495128
+  },
+  {
+    "STT": 59,
+    "GEN": "HRAS",
+    "STT NST": 11,
+    "START": 532242,
+    "END": 535576
+  },
+  {
+    "STT": 60,
+    "GEN": "CBL",
+    "STT NST": 11,
+    "START": 119206339,
+    "END": 119308149
+  },
+  {
+    "STT": 61,
+    "GEN": "NBN",
+    "STT NST": 8,
+    "START": 89933331,
+    "END": 89984667
+  },
+  {
+    "STT": 62,
+    "GEN": "RAD50",
+    "STT NST": 5,
+    "START": 132556977,
+    "END": 132646349
+  },
+  {
+    "STT": 63,
+    "GEN": "NRAS",
+    "STT NST": 1,
+    "START": 114704469,
+    "END": 114716771
+  },
+  {
+    "STT": 64,
+    "GEN": "SMO",
+    "STT NST": 7,
+    "START": 129188633,
+    "END": 129213548
+  },
+  {
+    "STT": 65,
+    "GEN": "FLT4",
+    "STT NST": 5,
+    "START": 180601506,
+    "END": 180650298
+  },
+  {
+    "STT": 66,
+    "GEN": "BLM",
+    "STT NST": 15,
+    "START": 90717346,
+    "END": 90816166
+  },
+  {
+    "STT": 67,
+    "GEN": "CSF1R",
+    "STT NST": 5,
+    "START": 150053295,
+    "END": 150113365
+  },
+  {
+    "STT": 68,
+    "GEN": "FLT3",
+    "STT NST": 13,
+    "START": 28003274,
+    "END": 28100576
+  },
+  {
+    "STT": 69,
+    "GEN": "RECQL4",
+    "STT NST": 8,
+    "START": 144511288,
+    "END": 144517833
+  },
+  {
+    "STT": 70,
+    "GEN": "KDR",
+    "STT NST": 4,
+    "START": 55078481,
+    "END": 55125595
+  },
+  {
+    "STT": 71,
+    "GEN": "KEAP1",
+    "STT NST": 19,
+    "START": 10486125,
+    "END": 10503356
+  },
+  {
+    "STT": 72,
+    "GEN": "PIK3CB",
+    "STT NST": 3,
+    "START": 138652698,
+    "END": 138834928
+  },
+  {
+    "STT": 73,
+    "GEN": "FBXW7",
+    "STT NST": 4,
+    "START": 152320544,
+    "END": 152536092
+  },
+  {
+    "STT": 74,
+    "GEN": "SMAD4",
+    "STT NST": 18,
+    "START": 51030213,
+    "END": 51085042
+  },
+  {
+    "STT": 75,
+    "GEN": "JUN",
+    "STT NST": 1,
+    "START": 58780791,
+    "END": 58784047
+  },
+  {
+    "STT": 76,
+    "GEN": "EPHB4",
+    "STT NST": 7,
+    "START": 100802565,
+    "END": 100827523
+  },
+  {
+    "STT": 77,
+    "GEN": "MSH6",
+    "STT NST": 2,
+    "START": 47783145,
+    "END": 47806953
+  },
+  {
+    "STT": 78,
+    "GEN": "PMS2",
+    "STT NST": 7,
+    "START": 5970925,
+    "END": 6009106
+  },
+  {
+    "STT": 79,
+    "GEN": "APC",
+    "STT NST": 5,
+    "START": 112707498,
+    "END": 112846239
+  },
+  {
+    "STT": 80,
+    "GEN": "MLH1",
+    "STT NST": 3,
+    "START": 36993466,
+    "END": 37050846
+  },
+  {
+    "STT": 81,
+    "GEN": "MSH2",
+    "STT NST": 2,
+    "START": 47403067,
+    "END": 47634501
+  },
+  {
+    "STT": 82,
+    "GEN": "MAP2K2",
+    "STT NST": 19,
+    "START": 4090321,
+    "END": 4124122
+  },
+  {
+    "STT": 83,
+    "GEN": "ABL1",
+    "STT NST": 9,
+    "START": 130713043,
+    "END": 130887675
+  },
+  {
+    "STT": 84,
+    "GEN": "EZH2",
+    "STT NST": 7,
+    "START": 148807383,
+    "END": 148884291
+  },
+  {
+    "STT": 85,
+    "GEN": "GNA11",
+    "STT NST": 19,
+    "START": 3094362,
+    "END": 3123999
+  },
+  {
+    "STT": 86,
+    "GEN": "GNAQ",
+    "STT NST": 9,
+    "START": 77716097,
+    "END": 78031811
+  },
+  {
+    "STT": 87,
+    "GEN": "JAK1",
+    "STT NST": 1,
+    "START": 64833229,
+    "END": 65067746
+  },
+  {
+    "STT": 88,
+    "GEN": "NPM1",
+    "STT NST": 5,
+    "START": 171387116,
+    "END": 171410900
+  },
+  {
+    "STT": 89,
+    "GEN": "RAF1",
+    "STT NST": 3,
+    "START": 12583601,
+    "END": 12664117
+  },
+  {
+    "STT": 90,
+    "GEN": "RUNX1",
+    "STT NST": 21,
+    "START": 34787801,
+    "END": 35049302
+  },
+  {
+    "STT": 91,
+    "GEN": "VHL",
+    "STT NST": 3,
+    "START": 10141778,
+    "END": 10153667
+  },
+  {
+    "STT": 92,
+    "GEN": "CDH1",
+    "STT NST": 16,
+    "START": 68737292,
+    "END": 68835537
+  },
+  {
+    "STT": 93,
+    "GEN": "CEBPA",
+    "STT NST": 19,
+    "START": 33299934,
+    "END": 33302534
+  },
+  {
+    "STT": 94,
+    "GEN": "CTNNB1",
+    "STT NST": 3,
+    "START": 41199505,
+    "END": 41240443
+  },
+  {
+    "STT": 95,
+    "GEN": "FANCA",
+    "STT NST": 16,
+    "START": 89737549,
+    "END": 89816647
+  },
+  {
+    "STT": 96,
+    "GEN": "FANCC",
+    "STT NST": 9,
+    "START": 95099054,
+    "END": 95317709
+  },
+  {
+    "STT": 97,
+    "GEN": "FANCF",
+    "STT NST": 11,
+    "START": 22622533,
+    "END": 22625823
+  },
+  {
+    "STT": 98,
+    "GEN": "FANCG",
+    "STT NST": 9,
+    "START": 35073839,
+    "END": 35079942
+  },
+  {
+    "STT": 99,
+    "GEN": "FOXL2",
+    "STT NST": 3,
+    "START": 138944224,
+    "END": 138947137
+  },
+  {
+    "STT": 100,
+    "GEN": "JAK3",
+    "STT NST": 19,
+    "START": 17824782,
+    "END": 17847982
+  },
+  {
+    "STT": 101,
+    "GEN": "MYC",
+    "STT NST": 8,
+    "START": 127735434,
+    "END": 127742951
+  },
+  {
+    "STT": 102,
+    "GEN": "PIK3R1",
+    "STT NST": 5,
+    "START": 68215756,
+    "END": 68301821
+  },
+  {
+    "STT": 103,
+    "GEN": "PTPN11",
+    "STT NST": 12,
+    "START": 112418947,
+    "END": 112509918
+  },
+  {
+    "STT": 104,
+    "GEN": "SMARCB1",
+    "STT NST": 22,
+    "START": 23786966,
+    "END": 23838009
+  },
+  {
+    "STT": 105,
+    "GEN": "BRCA1",
+    "STT NST": 17,
+    "START": 43044295,
+    "END": 43170327
+  },
+  {
+    "STT": 106,
+    "GEN": "AKT2",
+    "STT NST": 19,
+    "START": 40230317,
+    "END": 40285345
+  },
+  {
+    "STT": 107,
+    "GEN": "TUBB3",
+    "STT NST": 16,
+    "START": 89921925,
+    "END": 89936097
+  },
+  {
+    "STT": 108,
+    "GEN": "FOXP3",
+    "STT NST": "X",
+    "START": 49250438,
+    "END": 49264710
+  },
+  {
+    "STT": 109,
+    "GEN": "TFF3",
+    "STT NST": 21,
+    "START": 42311667,
+    "END": 42315409
+  },
+  {
+    "STT": 110,
+    "GEN": "TIMP1",
+    "STT NST": "X",
+    "START": 47582436,
+    "END": 47586789
+  },
+  {
+    "STT": 111,
+    "GEN": "SGK1",
+    "STT NST": 6,
+    "START": 23278231,
+    "END": 23381294
+  },
+  {
+    "STT": 112,
+    "GEN": "TSC2",
+    "STT NST": 16,
+    "START": 2047985,
+    "END": 2089491
+  },
+  {
+    "STT": 113,
+    "GEN": "EPCAM",
+    "STT NST": 2,
+    "START": 47369311,
+    "END": 47387020
+  },
+  {
+    "STT": 114,
+    "GEN": "XRCC3",
+    "STT NST": 14,
+    "START": 103697617,
+    "END": 103715451
+  },
+  {
+    "STT": 115,
+    "GEN": "TOP2A",
+    "STT NST": 17,
+    "START": 40388525,
+    "END": 40417896
+  },
+  {
+    "STT": 116,
+    "GEN": "MMP9",
+    "STT NST": 20,
+    "START": 46008908,
+    "END": 46016561
+  },
+  {
+    "STT": 117,
+    "GEN": "RSF1",
+    "STT NST": 11,
+    "START": 77660009,
+    "END": 77872232
+  },
+  {
+    "STT": 118,
+    "GEN": "AGR2",
+    "STT NST": 7,
+    "START": 16791811,
+    "END": 16804999
+  },
+  {
+    "STT": 119,
+    "GEN": "BARD1",
+    "STT NST": 2,
+    "START": 214725646,
+    "END": 214809683
+  },
+  {
+    "STT": 120,
+    "GEN": "TOP1",
+    "STT NST": 20,
+    "START": 41028822,
+    "END": 41124487
+  },
+  {
+    "STT": 121,
+    "GEN": "AR",
+    "STT NST": "X",
+    "START": 67544021,
+    "END": 67730619
+  },
+  {
+    "STT": 122,
+    "GEN": "MTHFR",
+    "STT NST": 1,
+    "START": 11785723,
+    "END": 11805964
+  },
+  {
+    "STT": 123,
+    "GEN": "HSPA5",
+    "STT NST": 9,
+    "START": 125234853,
+    "END": 125241343
+  },
+  {
+    "STT": 124,
+    "GEN": "VEGFA",
+    "STT NST": 6,
+    "START": 43770211,
+    "END": 43786487
+  },
+  {
+    "STT": 125,
+    "GEN": "PPP1R15A",
+    "STT NST": 19,
+    "START": 48872421,
+    "END": 48876058
+  },
+  {
+    "STT": 126,
+    "GEN": "ESR2",
+    "STT NST": 14,
+    "START": 64226707,
+    "END": 64338613
+  },
+  {
+    "STT": 127,
+    "GEN": "EREG",
+    "STT NST": 4,
+    "START": 74365145,
+    "END": 74388749
+  },
+  {
+    "STT": 128,
+    "GEN": "ALCAM",
+    "STT NST": 3,
+    "START": 105366909,
+    "END": 105576900
+  },
+  {
+    "STT": 129,
+    "GEN": "HSPH1",
+    "STT NST": 13,
+    "START": 31134973,
+    "END": 31162388
+  },
+  {
+    "STT": 130,
+    "GEN": "HLA-C",
+    "STT NST": 6,
+    "START": 31268749,
+    "END": 31272092
+  },
+  {
+    "STT": 131,
+    "GEN": "PPP2R2A",
+    "STT NST": 8,
+    "START": 26291508,
+    "END": 26372680
+  },
+  {
+    "STT": 132,
+    "GEN": "CCR5",
+    "STT NST": 3,
+    "START": 46370142,
+    "END": 46376206
+  },
+  {
+    "STT": 133,
+    "GEN": "DKK1",
+    "STT NST": 10,
+    "START": 52314281,
+    "END": 52317657
+  },
+  {
+    "STT": 134,
+    "GEN": "RPA1",
+    "STT NST": null,
+    "START": 1900082,
+    "END": 1900082
+  },
+  {
+    "STT": 135,
+    "GEN": "TACSTD2",
+    "STT NST": 1,
+    "START": 58575433,
+    "END": 58577252
+  },
+  {
+    "STT": 136,
+    "GEN": "FOS",
+    "STT NST": 14,
+    "START": 75278828,
+    "END": 75282230
+  },
+  {
+    "STT": 137,
+    "GEN": "FGF3",
+    "STT NST": 11,
+    "START": 69809968,
+    "END": 69819416
+  },
+  {
+    "STT": 138,
+    "GEN": "GSTP1",
+    "STT NST": 11,
+    "START": 67583812,
+    "END": 67586653
+  },
+  {
+    "STT": 139,
+    "GEN": "RAD54L",
+    "STT NST": 1,
+    "START": 46247688,
+    "END": 46278473
+  },
+  {
+    "STT": 140,
+    "GEN": "SLFN11",
+    "STT NST": 17,
+    "START": 35350305,
+    "END": 35373621
+  },
+  {
+    "STT": 141,
+    "GEN": "CD274",
+    "STT NST": 9,
+    "START": 5450542,
+    "END": 5470554
+  },
+  {
+    "STT": 142,
+    "GEN": "RAD51B",
+    "STT NST": 14,
+    "START": 67819779,
+    "END": 68683096
+  },
+  {
+    "STT": 143,
+    "GEN": "FANCL",
+    "STT NST": 2,
+    "START": 58159243,
+    "END": 58241380
+  },
+  {
+    "STT": 144,
+    "GEN": "WT1",
+    "STT NST": 11,
+    "START": 32387775,
+    "END": 32435539
+  },
+  {
+    "STT": 145,
+    "GEN": "RAD51D",
+    "STT NST": 17,
+    "START": 35092221,
+    "END": 35119860
+  },
+  {
+    "STT": 146,
+    "GEN": "NT5E",
+    "STT NST": 6,
+    "START": 85450083,
+    "END": 85495784
+  },
+  {
+    "STT": 147,
+    "GEN": "RAD51C",
+    "STT NST": 17,
+    "START": 58692573,
+    "END": 58735611
+  },
+  {
+    "STT": 148,
+    "GEN": "WRN",
+    "STT NST": 8,
+    "START": 31033810,
+    "END": 31176138
+  },
+  {
+    "STT": 149,
+    "GEN": "PROM1",
+    "STT NST": 4,
+    "START": 15968228,
+    "END": 16084023
+  },
+  {
+    "STT": 150,
+    "GEN": "MRE11",
+    "STT NST": 11,
+    "START": 94415570,
+    "END": 94512412
+  },
+  {
+    "STT": 151,
+    "GEN": "FGF19",
+    "STT NST": 11,
+    "START": 69698238,
+    "END": 69704022
+  },
+  {
+    "STT": 152,
+    "GEN": "RECQL",
+    "STT NST": 12,
+    "START": 21468910,
+    "END": 21501635
+  },
+  {
+    "STT": 153,
+    "GEN": "AFP",
+    "STT NST": 4,
+    "START": 73436221,
+    "END": 73456174
+  },
+  {
+    "STT": 154,
+    "GEN": "CDKN1A",
+    "STT NST": 6,
+    "START": 36676463,
+    "END": 36687332
+  },
+  {
+    "STT": 155,
+    "GEN": "BAX",
+    "STT NST": 19,
+    "START": 48954875,
+    "END": 48961798
+  },
+  {
+    "STT": 156,
+    "GEN": "TERT",
+    "STT NST": 5,
+    "START": 1253167,
+    "END": 1295068
+  },
+  {
+    "STT": 157,
+    "GEN": "NTRK2",
+    "STT NST": 9,
+    "START": 84668522,
+    "END": 85027054
+  },
+  {
+    "STT": 158,
+    "GEN": "SMARCA4",
+    "STT NST": 19,
+    "START": 10961030,
+    "END": 11062273
+  },
+  {
+    "STT": 159,
+    "GEN": "FGF1",
+    "STT NST": 5,
+    "START": 142592178,
+    "END": 142698070
+  },
+  {
+    "STT": 160,
+    "GEN": "POLD1",
+    "STT NST": 19,
+    "START": 50384323,
+    "END": 50418018
+  },
+  {
+    "STT": 161,
+    "GEN": "RAD52",
+    "STT NST": 12,
+    "START": 911736,
+    "END": 991122
+  },
+  {
+    "STT": 162,
+    "GEN": "BCL2L11",
+    "STT NST": 2,
+    "START": 111120914,
+    "END": 111168445
+  },
+  {
+    "STT": 163,
+    "GEN": "TYMS",
+    "STT NST": 18,
+    "START": 657653,
+    "END": 673578
+  },
+  {
+    "STT": 164,
+    "GEN": "ETS2",
+    "STT NST": 21,
+    "START": 128458765,
+    "END": 128587558
+  },
+  {
+    "STT": 165,
+    "GEN": "ABCB1",
+    "STT NST": 7,
+    "START": 87503017,
+    "END": 87713295
+  },
+  {
+    "STT": 166,
+    "GEN": "RAD51",
+    "STT NST": 15,
+    "START": 40694733,
+    "END": 40732340
+  },
+  {
+    "STT": 167,
+    "GEN": "PDCD4",
+    "STT NST": 10,
+    "START": 110871928,
+    "END": 110900006
+  },
+  {
+    "STT": 168,
+    "GEN": "RECQL5",
+    "STT NST": 17,
+    "START": 75626854,
+    "END": 75667154
+  },
+  {
+    "STT": 169,
+    "GEN": "POU2F3",
+    "STT NST": 11,
+    "START": 120236638,
+    "END": 120319945
+  },
+  {
+    "STT": 170,
+    "GEN": "RICTOR",
+    "STT NST": 5,
+    "START": 38937920,
+    "END": 39074399
+  },
+  {
+    "STT": 171,
+    "GEN": "TSC1",
+    "STT NST": 9,
+    "START": 132891349,
+    "END": 132945378
+  },
+  {
+    "STT": 172,
+    "GEN": "WEE1",
+    "STT NST": 11,
+    "START": 9573670,
+    "END": 9589985
+  },
+  {
+    "STT": 173,
+    "GEN": "HAVCR2",
+    "STT NST": 17,
+    "START": 7668421,
+    "END": 7687490
+  },
+  {
+    "STT": 174,
+    "GEN": "AREG",
+    "STT NST": 4,
+    "START": 74445136,
+    "END": 74455005
+  },
+  {
+    "STT": 175,
+    "GEN": "NRG1",
+    "STT NST": 8,
+    "START": 31639245,
+    "END": 32774046
+  },
+  {
+    "STT": 176,
+    "GEN": "XRCC1",
+    "STT NST": 19,
+    "START": 43543311,
+    "END": 43575527
+  },
+  {
+    "STT": 177,
+    "GEN": "ARAF",
+    "STT NST": "X",
+    "START": 47561205,
+    "END": 47571908
+  }
+]
