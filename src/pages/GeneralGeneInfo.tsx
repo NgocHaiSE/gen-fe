@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Search, ChevronLeft, ChevronRight, Dna, Loader2, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { getMutationData, MutationItem } from '../services/generalInfo';
+import { Search, ChevronLeft, ChevronRight, Dna, Loader2, FileText, X } from 'lucide-react';
+import { getMutationData } from '../services/generalInfo';
 import { cn } from '../utils/cn';
 
 interface MutationData {
@@ -20,6 +19,9 @@ export default function GeneralGeneInfo() {
     const [error, setError] = useState<string | null>(null);
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
     const [totalPages, setTotalPages] = useState(1);
+
+    // Modal state
+    const [selectedItem, setSelectedItem] = useState<MutationData | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,6 +58,14 @@ export default function GeneralGeneInfo() {
 
     const handlePageChange = (page: number) => {
         setPagination(prev => ({ ...prev, current: page }));
+    };
+
+    const openModal = (item: MutationData) => {
+        setSelectedItem(item);
+    };
+
+    const closeModal = () => {
+        setSelectedItem(null);
     };
 
     if (loading) {
@@ -146,13 +156,13 @@ export default function GeneralGeneInfo() {
                                         </td>
                                         <td className="px-4 py-3 text-sm text-slate-600">{item.mutation_effect}</td>
                                         <td className="px-4 py-3 text-center">
-                                            <Link
-                                                to={`/gene-and-mutation/${item.id}`}
-                                                className="inline-flex items-center gap-1 text-teal-600 hover:text-teal-800 hover:underline text-sm font-medium"
+                                            <button
+                                                onClick={() => openModal(item)}
+                                                className="inline-flex items-center gap-1 px-3 py-1.5 bg-teal-50 text-teal-700 hover:bg-teal-100 rounded-lg text-sm font-medium transition-colors"
                                             >
+                                                <FileText className="w-3.5 h-3.5" />
                                                 {item.articles.length}
-                                                <ExternalLink className="w-3 h-3" />
-                                            </Link>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))
@@ -212,6 +222,50 @@ export default function GeneralGeneInfo() {
                     </div>
                 </div>
             </div>
+
+            {/* Modal */}
+            {selectedItem && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-xl shadow-xl w-full max-w-lg animate-fade-in">
+                        <div className="flex items-center justify-between p-4 border-b border-slate-200">
+                            <div>
+                                <h3 className="text-lg font-semibold text-teal-900">Dẫn chứng - Gene Aliases</h3>
+                                <p className="text-sm text-slate-500">Gen: {selectedItem.gene_name} | Đột biến: {selectedItem.alteration_name}</p>
+                            </div>
+                            <button onClick={closeModal} className="p-1 hover:bg-slate-100 rounded">
+                                <X className="w-5 h-5 text-slate-500" />
+                            </button>
+                        </div>
+                        <div className="p-4 max-h-[60vh] overflow-y-auto">
+                            {selectedItem.articles.length === 0 ? (
+                                <p className="text-slate-500 text-center py-4">Không có dẫn chứng</p>
+                            ) : (
+                                <div className="space-y-2">
+                                    {selectedItem.articles.map((article, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-3"
+                                        >
+                                            <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-700 font-medium text-sm">
+                                                {idx + 1}
+                                            </div>
+                                            <span className="text-slate-700 font-medium">{article}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div className="p-4 border-t border-slate-200 flex justify-end">
+                            <button
+                                onClick={closeModal}
+                                className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
+                            >
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

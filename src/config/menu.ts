@@ -131,6 +131,11 @@ export const menuConfig = [
         ]
     },
     {
+        path: '/user-manager',
+        name: 'Quản lý người dùng',
+        icon: Users
+    },
+    {
         path: '/dev-teams',
         name: 'Nhóm phát triển',
         icon: Code2

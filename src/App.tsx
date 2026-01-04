@@ -30,7 +30,7 @@ import MedicinesList from './pages/MedicinesList.tsx'
 import CosmicSamples from './pages/CosmicSamples.tsx'
 import CosmicSampleDetail from './pages/CosmicSampleDetail.tsx'
 import PanelData from './pages/PanelData.tsx'
-
+import UserManagement from './pages/UserManagement.tsx'
 
 
 function App() {
@@ -139,6 +139,9 @@ function App() {
 
                 {/* Panel Data - Mối quan hệ gen-thuốc */}
                 <Route path="panel-data" element={<PanelData />} />
+
+                {/* User Management - Admin only */}
+                <Route path="user-manager" element={<UserManagement />} />
 
                 {/* Health Record Detail Routes */}
                 <Route path="health-record">
