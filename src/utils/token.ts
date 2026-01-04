@@ -48,6 +48,38 @@ export const getTokenObject = () => {
     };
 };
 
+const USER_INFO_KEY = "userInfo";
+
+/**
+ * Save user info to sessionStorage
+ * @param userInfo - User info object from backend
+ */
+export const saveUserInfo = (userInfo: API.UserInfo) => {
+    sessionStorage.setItem(USER_INFO_KEY, JSON.stringify(userInfo));
+};
+
+/**
+ * Get user info from sessionStorage
+ */
+export const getUserInfo = (): API.UserInfo | null => {
+    const data = sessionStorage.getItem(USER_INFO_KEY);
+    if (data) {
+        try {
+            return JSON.parse(data) as API.UserInfo;
+        } catch {
+            return null;
+        }
+    }
+    return null;
+};
+
+/**
+ * Remove user info from sessionStorage
+ */
+export const removeUserInfo = () => {
+    sessionStorage.removeItem(USER_INFO_KEY);
+};
+
 export default {
     setToken,
     save,
@@ -55,4 +87,7 @@ export default {
     removeToken,
     isAuthenticated,
     getTokenObject,
+    saveUserInfo,
+    getUserInfo,
+    removeUserInfo,
 };

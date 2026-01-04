@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Lock, User, ArrowRight } from 'lucide-react'
 import { login, currentUser } from '../services/auth'
-import token from '../utils/token'
-import logo from '../assets/Logo_2.png'
+import token, { saveUserInfo } from '../utils/token'
+import logo from '../assets/logo.png'
 
 export default function Login() {
     const navigate = useNavigate()
@@ -19,25 +19,64 @@ export default function Login() {
         const values = Object.fromEntries(formData.entries())
 
         try {
-            const loginData = await login(values as API.LoginParams)
-            // @ts-ignore
-            const { accessToken } = loginData.data || loginData;
+            // Bước 1: Gọi API login để lấy accessToken
+            // Backend trả về: { accessToken, signStatus }
+            // Axios wrap response trong .data
+            const loginResponse = await login(values as API.LoginParams) as any
 
-            if (accessToken) {
-                token.save(accessToken);
-                await currentUser();
+            // Response từ axios: loginResponse.data chứa data thực từ backend
+            const responseData = loginResponse?.data || loginResponse;
+            const accessToken = responseData?.accessToken;
+
+            console.log('Login response:', loginResponse);
+            console.log('Response data:', responseData);
+            console.log('Access token:', accessToken);
+
+            if (!accessToken) {
+                setError('Đăng nhập thất bại: Không nhận được token')
+                return
+            }
+
+
+            // Bước 2: Lưu accessToken
+            token.save(accessToken);
+
+            // Bước 3: Gọi API current-user với token để lấy thông tin user
+            // Backend trả về: { data: { name, access, userid, email, ... } }
+            // Axios wrap trong .data, nên user data thực sự ở response.data.data
+            const userResponse = await currentUser() as any;
+
+            // Axios response: userResponse.data = { data: { name, access, ... } }
+            const axiosData = userResponse?.data || userResponse;
+            const userData = axiosData?.data || axiosData;
+
+            console.log('User response:', userResponse);
+            console.log('Axios data:', axiosData);
+            console.log('User data:', userData);
+
+            if (userData && userData.userid) {
+                // Bước 4: Lưu user info vào sessionStorage
+                saveUserInfo({
+                    name: userData.name || '',
+                    access: userData.access || 'user',
+                    userid: userData.userid,
+                    email: userData.email || ''
+                });
+
                 navigate('/welcome');
             } else {
-                setError('Login failed: No access token received')
+                setError('Đăng nhập thất bại: Không lấy được thông tin tài khoản')
             }
+
         } catch (err: any) {
             console.error(err)
-            const msg = err.response?.data?.message || 'Sai tài khoản hoặc mật khẩu';
+            const msg = err.response?.data?.message || err.message || 'Sai tài khoản hoặc mật khẩu';
             setError(msg)
         } finally {
             setLoading(false)
         }
     }
+
 
     return (
         <div className="w-full max-w-md animate-slide-up">
@@ -47,13 +86,13 @@ export default function Login() {
                 <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-teal-300/20 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div className="text-center mb-8 relative z-10">
-                    <div className="flex justify-center mb-6">
+                    <div className="flex justify-center">
                         <div className="transform hover:scale-105 transition-transform duration-300">
-                            <img alt="logo" src={logo} className="h-32 w-auto object-contain" />
+                            <img alt="logo" src={logo} className="h-42 w-auto object-contain mix-blend-multiply" />
                         </div>
                     </div>
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-900 to-teal-500">
-                        Ung Thư
+                        VN - Cancer AI
                     </h1>
                     <p className="text-slate-medium font-medium mt-2">Dữ liệu Gen & Y Học Chính Xác</p>
                 </div>

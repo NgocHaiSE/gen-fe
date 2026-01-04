@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import request from '../utils/request';
 import AddToCollectionModal from '../components/AddToCollectionModal';
+import { useAuth } from '../utils/auth';
 
 // ==================== TYPES ====================
 interface TestCase {
@@ -49,6 +50,7 @@ const TestList = () => {
     const [uploadDropdown, setUploadDropdown] = useState<string | null>(null);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [showCollectionModal, setShowCollectionModal] = useState(false);
+    const { canEdit } = useAuth(); // Auth hook
 
     const [newTest, setNewTest] = useState({ patientID: '', patientName: '', primaryTissue: '', testName: '' });
     const pageSizeOptions = [10, 20, 50, 100];
@@ -286,10 +288,12 @@ const TestList = () => {
                         </h1>
                         <p className="text-slate-medium mt-1">Quản lý các xét nghiệm gen của bệnh nhân</p>
                     </div>
-                    <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 px-4 py-2.5 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors font-medium">
-                        <Plus className="w-5 h-5" />
-                        Thêm xét nghiệm
-                    </button>
+                    {canEdit && (
+                        <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 px-4 py-2.5 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors font-medium">
+                            <Plus className="w-5 h-5" />
+                            Thêm xét nghiệm
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -346,13 +350,15 @@ const TestList = () => {
                             <FolderPlus className="w-4 h-4" />
                             Thêm vào bộ sưu tập
                         </button>
-                        <button
-                            onClick={handleDeleteSelected}
-                            className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium"
-                        >
-                            <Trash2 className="w-4 h-4" />
-                            Xóa đã chọn
-                        </button>
+                        {canEdit && (
+                            <button
+                                onClick={handleDeleteSelected}
+                                className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                                Xóa đã chọn
+                            </button>
+                        )}
                         <button
                             onClick={() => setSelectedIds([])}
                             className="px-3 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors text-sm"
@@ -381,6 +387,7 @@ const TestList = () => {
                                                 setSelectedIds([]);
                                             }
                                         }}
+                                        disabled={!canEdit && data.length === 0} // Chỉ để cho đẹp nếu empty, logic chính xử lý ở actions
                                         className="w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500 cursor-pointer"
                                     />
                                 </th>
@@ -437,37 +444,41 @@ const TestList = () => {
                                         <td className="py-3 px-4">
                                             <div className="flex items-center justify-center gap-1">
                                                 {/* Upload dropdown */}
-                                                <div className="relative">
-                                                    <button
-                                                        onClick={() => setUploadDropdown(uploadDropdown === item.patientID ? null : item.patientID)}
-                                                        className="p-2 text-blue-600 hover:bg-blue-100 rounded-md"
-                                                        title="Upload file"
-                                                    >
-                                                        <Upload className="w-4 h-4" />
-                                                    </button>
-                                                    {uploadDropdown === item.patientID && (
-                                                        <div className="absolute z-10 right-0 mt-1 bg-white rounded-lg shadow-lg border border-slate-light py-1 min-w-[120px]">
-                                                            <button
-                                                                onClick={() => openUploadModal(item.patientID, 'read1')}
-                                                                className="w-full text-left px-4 py-2 text-sm hover:bg-teal-50 text-slate-dark"
-                                                            >
-                                                                Read 1
-                                                            </button>
-                                                            <button
-                                                                onClick={() => openUploadModal(item.patientID, 'read2')}
-                                                                className="w-full text-left px-4 py-2 text-sm hover:bg-teal-50 text-slate-dark"
-                                                            >
-                                                                Read 2
-                                                            </button>
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                {canEdit && (
+                                                    <div className="relative">
+                                                        <button
+                                                            onClick={() => setUploadDropdown(uploadDropdown === item.patientID ? null : item.patientID)}
+                                                            className="p-2 text-blue-600 hover:bg-blue-100 rounded-md"
+                                                            title="Upload file"
+                                                        >
+                                                            <Upload className="w-4 h-4" />
+                                                        </button>
+                                                        {uploadDropdown === item.patientID && (
+                                                            <div className="absolute z-10 right-0 mt-1 bg-white rounded-lg shadow-lg border border-slate-light py-1 min-w-[120px]">
+                                                                <button
+                                                                    onClick={() => openUploadModal(item.patientID, 'read1')}
+                                                                    className="w-full text-left px-4 py-2 text-sm hover:bg-teal-50 text-slate-dark"
+                                                                >
+                                                                    Read 1
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => openUploadModal(item.patientID, 'read2')}
+                                                                    className="w-full text-left px-4 py-2 text-sm hover:bg-teal-50 text-slate-dark"
+                                                                >
+                                                                    Read 2
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
                                                 <button onClick={() => handleDownload(item)} disabled={!item.hasResult} className="p-2 text-green-600 hover:bg-green-100 rounded-md disabled:opacity-50" title="Tải xuống">
                                                     <Download className="w-4 h-4" />
                                                 </button>
-                                                <button onClick={() => handleDelete((item._id || item.Id)!, item.patientID)} className="p-2 text-red-600 hover:bg-red-100 rounded-md" title="Xóa">
-                                                    <Trash2 className="w-4 h-4" />
-                                                </button>
+                                                {canEdit && (
+                                                    <button onClick={() => handleDelete((item._id || item.Id)!, item.patientID)} className="p-2 text-red-600 hover:bg-red-100 rounded-md" title="Xóa">
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                         <td className="py-3 px-4 text-center">{getStatusBadge(item)}</td>

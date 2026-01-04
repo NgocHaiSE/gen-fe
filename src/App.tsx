@@ -31,6 +31,9 @@ import CosmicSamples from './pages/CosmicSamples.tsx'
 import CosmicSampleDetail from './pages/CosmicSampleDetail.tsx'
 import PanelData from './pages/PanelData.tsx'
 import UserManagement from './pages/UserManagement.tsx'
+import AccountInfo from './pages/AccountInfo.tsx'
+import Unauthorized from './pages/Unauthorized.tsx'
+import RequireRole from './components/RequireRole.tsx'
 
 
 function App() {
@@ -45,9 +48,11 @@ function App() {
                     <DashboardLayout />
                 </RequireAuth>
             }>
+                <Route path="401" element={<Unauthorized />} />
                 <Route index element={<Navigate to="/home" replace />} />
                 <Route path="home" element={<Home />} />
                 <Route path="welcome" element={<Dashboard />} />
+                <Route path="account" element={<AccountInfo />} />
 
                 {/* Cancer Routes - explicit for now to match menu */}
                 <Route path="lung-cancer">
@@ -58,7 +63,11 @@ function App() {
                     <Route path="drug" element={<DrugTreatment type="lung-cancer" />} />
                     <Route path="other-treatment" element={<OtherTreatment type="lung-cancer" />} />
                     <Route path="article" element={<Article type="lung-cancer" />} />
-                    <Route path="health-record" element={<HealthRecord type="lung-cancer" />} />
+                    <Route path="health-record" element={
+                        <RequireRole allowedRoles={['admin', 'doctor']}>
+                            <HealthRecord type="lung-cancer" />
+                        </RequireRole>
+                    } />
                 </Route>
 
                 <Route path="liver-cancer">
@@ -69,7 +78,11 @@ function App() {
                     <Route path="drug" element={<DrugTreatment type="liver-cancer" />} />
                     <Route path="other-treatment" element={<OtherTreatment type="liver-cancer" />} />
                     <Route path="article" element={<Article type="liver-cancer" />} />
-                    <Route path="health-record" element={<HealthRecord type="liver-cancer" />} />
+                    <Route path="health-record" element={
+                        <RequireRole allowedRoles={['admin', 'doctor']}>
+                            <HealthRecord type="liver-cancer" />
+                        </RequireRole>
+                    } />
                 </Route>
 
                 <Route path="breast-cancer">
@@ -80,7 +93,11 @@ function App() {
                     <Route path="drug" element={<DrugTreatment type="breast-cancer" />} />
                     <Route path="other-treatment" element={<OtherTreatment type="breast-cancer" />} />
                     <Route path="article" element={<Article type="breast-cancer" />} />
-                    <Route path="health-record" element={<HealthRecord type="breast-cancer" />} />
+                    <Route path="health-record" element={
+                        <RequireRole allowedRoles={['admin', 'doctor']}>
+                            <HealthRecord type="breast-cancer" />
+                        </RequireRole>
+                    } />
                 </Route>
 
                 <Route path="thyroid-cancer">
@@ -91,7 +108,11 @@ function App() {
                     <Route path="drug" element={<DrugTreatment type="thyroid-cancer" />} />
                     <Route path="other-treatment" element={<OtherTreatment type="thyroid-cancer" />} />
                     <Route path="article" element={<Article type="thyroid-cancer" />} />
-                    <Route path="health-record" element={<HealthRecord type="thyroid-cancer" />} />
+                    <Route path="health-record" element={
+                        <RequireRole allowedRoles={['admin', 'doctor']}>
+                            <HealthRecord type="thyroid-cancer" />
+                        </RequireRole>
+                    } />
                 </Route>
 
                 <Route path="colorectal-cancer">
@@ -102,11 +123,15 @@ function App() {
                     <Route path="drug" element={<DrugTreatment type="colorectal-cancer" />} />
                     <Route path="other-treatment" element={<OtherTreatment type="colorectal-cancer" />} />
                     <Route path="article" element={<Article type="colorectal-cancer" />} />
-                    <Route path="health-record" element={<HealthRecord type="colorectal-cancer" />} />
+                    <Route path="health-record" element={
+                        <RequireRole allowedRoles={['admin', 'doctor']}>
+                            <HealthRecord type="colorectal-cancer" />
+                        </RequireRole>
+                    } />
                 </Route>
 
                 {/* Tests Routes */}
-                <Route path="tests">
+                <Route path="tests" element={<RequireRole allowedRoles={['admin', 'doctor']} />}>
                     <Route path="add-test" element={<TestList />} />
                     <Route path="collections" element={<Collections />} />
                     <Route path="collections/:id" element={<CollectionDetail />} />
@@ -140,11 +165,15 @@ function App() {
                 {/* Panel Data - Mối quan hệ gen-thuốc */}
                 <Route path="panel-data" element={<PanelData />} />
 
-                {/* User Management - Admin only */}
-                <Route path="user-manager" element={<UserManagement />} />
+                {/* User Management - Admin only (or Doctor as per request) */}
+                <Route path="user-manager" element={
+                    <RequireRole allowedRoles={['admin', 'doctor']}>
+                        <UserManagement />
+                    </RequireRole>
+                } />
 
                 {/* Health Record Detail Routes */}
-                <Route path="health-record">
+                <Route path="health-record" element={<RequireRole allowedRoles={['admin', 'doctor']} />}>
                     <Route path="lung-record/:id" element={<HealthRecordDetail recordType="lung-record" />} />
                     <Route path="liver-record/:id" element={<HealthRecordDetail recordType="liver-record" />} />
                     <Route path="breast-record/:id" element={<HealthRecordDetail recordType="breast-record" />} />

@@ -4,6 +4,8 @@ import { ChevronDown, ChevronRight, LayoutDashboard } from 'lucide-react'
 import { menuConfig } from '../config/menu'
 import { cn } from '../utils/cn'
 
+import { canAccessMenuItem } from '../utils/auth'
+
 export default function Sidebar() {
     const { pathname } = useLocation()
 
@@ -11,7 +13,7 @@ export default function Sidebar() {
         <aside className="w-[280px] bg-pure-white text-ink-black flex flex-col h-full transition-all duration-300 z-10 overflow-hidden shrink-0 border-r border-slate-light">
             <nav className="flex-1 overflow-y-auto py-2 custom-scrollbar">
                 <ul className="space-y-0.5">
-                    {menuConfig.map((item) => (
+                    {menuConfig.filter(canAccessMenuItem).map((item) => (
                         <SidebarItem key={item.path} item={item} currentPath={pathname} />
                     ))}
                 </ul>
@@ -74,7 +76,7 @@ function SidebarItem({ item, currentPath }: { item: any; currentPath: string }) 
                     )}
                 >
                     <ul className="py-1 bg-teal-50/50">
-                        {item.children.map((child: any) => (
+                        {item.children.filter(canAccessMenuItem).map((child: any) => (
                             <li key={child.path}>
                                 <NavLink
                                     to={child.path}

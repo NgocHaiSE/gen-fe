@@ -51,7 +51,7 @@ export const menuConfig = [
             { path: '/lung-cancer/article', name: 'Bài báo liên quan' },
             { path: '/lung-cancer/drug', name: 'Thuốc điều trị' },
             { path: '/lung-cancer/other-treatment', name: 'Các điều trị khác' },
-            { path: '/lung-cancer/health-record', name: 'Quản lý bệnh án' },
+            { path: '/lung-cancer/health-record', name: 'Quản lý bệnh án', access: 'canDoctor' },
         ]
     },
     {
@@ -65,7 +65,7 @@ export const menuConfig = [
             { path: '/liver-cancer/article', name: 'Bài báo liên quan' },
             { path: '/liver-cancer/drug', name: 'Thuốc điều trị' },
             { path: '/liver-cancer/other-treatment', name: 'Các điều trị khác' },
-            { path: '/liver-cancer/health-record', name: 'Quản lý bệnh án' },
+            { path: '/liver-cancer/health-record', name: 'Quản lý bệnh án', access: 'canDoctor' },
         ]
     },
     {
@@ -79,7 +79,7 @@ export const menuConfig = [
             { path: '/breast-cancer/article', name: 'Bài báo liên quan' },
             { path: '/breast-cancer/drug', name: 'Thuốc điều trị' },
             { path: '/breast-cancer/other-treatment', name: 'Các điều trị khác' },
-            { path: '/breast-cancer/health-record', name: 'Quản lý bệnh án' },
+            { path: '/breast-cancer/health-record', name: 'Quản lý bệnh án', access: 'canDoctor' },
         ]
     },
     {
@@ -93,7 +93,7 @@ export const menuConfig = [
             { path: '/thyroid-cancer/article', name: 'Bài báo liên quan' },
             { path: '/thyroid-cancer/drug', name: 'Thuốc điều trị' },
             { path: '/thyroid-cancer/other-treatment', name: 'Các điều trị khác' },
-            { path: '/thyroid-cancer/health-record', name: 'Quản lý bệnh án' },
+            { path: '/thyroid-cancer/health-record', name: 'Quản lý bệnh án', access: 'canDoctor' },
         ]
     },
     {
@@ -107,13 +107,14 @@ export const menuConfig = [
             { path: '/colorectal-cancer/article', name: 'Bài báo liên quan' },
             { path: '/colorectal-cancer/drug', name: 'Thuốc điều trị' },
             { path: '/colorectal-cancer/other-treatment', name: 'Các điều trị khác' },
-            { path: '/colorectal-cancer/health-record', name: 'Quản lý bệnh án' },
+            { path: '/colorectal-cancer/health-record', name: 'Quản lý bệnh án', access: 'canDoctor' },
         ]
     },
     {
         path: '/tests',
         name: 'Xét nghiệm',
         icon: FlaskConical,
+        access: 'canDoctor',
         children: [
             { path: '/tests/add-test', name: 'Danh sách xét nghiệm' },
             { path: '/tests/collections', name: 'Danh mục xét nghiệm' },
@@ -129,11 +130,6 @@ export const menuConfig = [
             { path: '/over-view/drug', name: 'Chuyên gia điều trị đích' },
             { path: '/over-view/drugtest', name: 'Chuyên gia thuốc điều trị' },
         ]
-    },
-    {
-        path: '/user-manager',
-        name: 'Quản lý người dùng',
-        icon: Users
     },
     {
         path: '/dev-teams',

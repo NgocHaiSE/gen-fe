@@ -20,11 +20,19 @@ declare namespace API {
         phone?: string;
     };
 
+    type UserInfo = {
+        name: string;
+        access: string;
+        userid: string;
+        email: string;
+    };
+
     type LoginResult = {
         status?: string;
         type?: string;
         currentAuthority?: string;
         accessToken?: string;
+        data?: UserInfo;
     };
 
     type LoginParams = {

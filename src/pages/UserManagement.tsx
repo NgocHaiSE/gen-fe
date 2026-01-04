@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Users, Plus, Pencil, Trash2, Search, Loader2, X, AlertTriangle, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { getAllUsers, addUser, updateUser, deleteUser, User, CreateUserParams, UpdateUserParams } from '../services/userService';
 import { cn } from '../utils/cn';
+import { useAuth } from '../utils/auth';
 
 type ModalType = 'add' | 'edit' | 'delete' | null;
 
@@ -19,6 +21,8 @@ const accessLabels: Record<string, { label: string; bgColor: string; textColor: 
 };
 
 export default function UserManagement() {
+    const { isAdmin } = useAuth();
+    const navigate = useNavigate();
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
@@ -54,8 +58,12 @@ export default function UserManagement() {
     };
 
     useEffect(() => {
-        fetchUsers();
-    }, []);
+        if (!isAdmin) {
+            navigate('/home');
+        } else {
+            fetchUsers();
+        }
+    }, [isAdmin]);
 
     useEffect(() => {
         const filtered = users.filter(user =>
@@ -199,13 +207,15 @@ export default function UserManagement() {
                             className="pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none w-80"
                         />
                     </div>
-                    <button
-                        onClick={openAddModal}
-                        className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors font-medium"
-                    >
-                        <Plus className="w-4 h-4" />
-                        Thêm người dùng
-                    </button>
+                    {isAdmin && (
+                        <button
+                            onClick={openAddModal}
+                            className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors font-medium"
+                        >
+                            <Plus className="w-4 h-4" />
+                            Thêm người dùng
+                        </button>
+                    )}
                 </div>
 
                 {/* Table */}
@@ -264,7 +274,7 @@ export default function UserManagement() {
                                                     {formatDate(user.updateAt)}
                                                 </td>
                                                 <td className="px-4 py-3">
-                                                    {user.access !== 'admin' ? (
+                                                    {user.access !== 'admin' && isAdmin ? (
                                                         <div className="flex items-center justify-center gap-2">
                                                             <button
                                                                 onClick={() => openEditModal(user)}
@@ -282,7 +292,7 @@ export default function UserManagement() {
                                                             </button>
                                                         </div>
                                                     ) : (
-                                                        <span className="text-slate-400 text-xs">-</span>
+                                                        <span className="text-slate-400 text-xs flex justify-center">-</span>
                                                     )}
                                                 </td>
                                             </tr>
