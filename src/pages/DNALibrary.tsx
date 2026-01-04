@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Database, Search, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Database, Search, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ArrowLeft } from 'lucide-react'
 
 interface GeneData {
     STT: number
@@ -10,6 +11,7 @@ interface GeneData {
 }
 
 export default function DNALibrary() {
+    const navigate = useNavigate()
     const [genes, setGenes] = useState<GeneData[]>([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
@@ -126,6 +128,13 @@ export default function DNALibrary() {
             <div className="bg-white rounded-xl shadow-sm border border-slate-light p-6">
                 <div className="flex items-center justify-between">
                     <div>
+                        <button
+                            onClick={() => navigate('/home')}
+                            className="flex items-center gap-2 text-teal-600 hover:text-teal-800 mb-3 transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            <span className="text-sm font-medium">Quay lại Trang chủ</span>
+                        </button>
                         <h1 className="text-2xl font-bold text-teal-900 mb-2 flex items-center gap-3 uppercase">
                             <Database className="w-7 h-7 text-teal-500" />
                             Thư viện phân lập DNA

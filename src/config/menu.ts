@@ -15,6 +15,13 @@ import {
     Pill
 } from 'lucide-react'
 
+// Import cancer icons from assets
+import lungIcon from '../assets/lung-icon.png'
+import liverIcon from '../assets/liver-icon.png'
+import breastIcon from '../assets/breast-icon.png'
+import thyroidIcon from '../assets/thyroid-icon.png'
+import colorectalIcon from '../assets/colorectal-icon.png'
+
 // Mapping icons is manual since we are switching to lucide-react
 export const menuConfig = [
     {
@@ -37,6 +44,7 @@ export const menuConfig = [
         path: '/lung-cancer',
         name: 'Ung thư phổi',
         icon: Activity,
+        iconImage: lungIcon,
         children: [
             { path: '/lung-cancer/overview', name: 'Tổng quan' },
             { path: '/lung-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -50,6 +58,7 @@ export const menuConfig = [
         path: '/liver-cancer',
         name: 'Ung thư gan',
         icon: Stethoscope,
+        iconImage: liverIcon,
         children: [
             { path: '/liver-cancer/overview', name: 'Tổng quan' },
             { path: '/liver-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -63,6 +72,7 @@ export const menuConfig = [
         path: '/breast-cancer',
         name: 'Ung thư vú',
         icon: Ribbon,
+        iconImage: breastIcon,
         children: [
             { path: '/breast-cancer/overview', name: 'Tổng quan' },
             { path: '/breast-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -76,6 +86,7 @@ export const menuConfig = [
         path: '/thyroid-cancer',
         name: 'Ung thư tuyến giáp',
         icon: Heart,
+        iconImage: thyroidIcon,
         children: [
             { path: '/thyroid-cancer/overview', name: 'Tổng quan' },
             { path: '/thyroid-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -89,6 +100,7 @@ export const menuConfig = [
         path: '/colorectal-cancer',
         name: 'Ung thư đại trực tràng',
         icon: HeartPulse,
+        iconImage: colorectalIcon,
         children: [
             { path: '/colorectal-cancer/overview', name: 'Tổng quan' },
             { path: '/colorectal-cancer/gene-mutation', name: 'Gen đột biến' },
@@ -103,7 +115,7 @@ export const menuConfig = [
         name: 'Xét nghiệm',
         icon: FlaskConical,
         children: [
-            { path: '/tests/add-test', name: 'Thêm mới xét nghiệm' },
+            { path: '/tests/add-test', name: 'Danh sách xét nghiệm' },
             { path: '/tests/collections', name: 'Danh mục xét nghiệm' },
             { path: '/tests/statistics', name: 'Thống kê' },
         ]

@@ -29,6 +29,7 @@ import DNALibrary from './pages/DNALibrary.tsx'
 import MedicinesList from './pages/MedicinesList.tsx'
 import CosmicSamples from './pages/CosmicSamples.tsx'
 import CosmicSampleDetail from './pages/CosmicSampleDetail.tsx'
+import PanelData from './pages/PanelData.tsx'
 
 
 
@@ -135,6 +136,9 @@ function App() {
 
                 {/* Dev Teams */}
                 <Route path="dev-teams" element={<DevTeams />} />
+
+                {/* Panel Data - Mối quan hệ gen-thuốc */}
+                <Route path="panel-data" element={<PanelData />} />
 
                 {/* Health Record Detail Routes */}
                 <Route path="health-record">

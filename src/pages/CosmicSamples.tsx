@@ -1,68 +1,105 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Database, Search, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Filter, Eye } from 'lucide-react'
+import { Database, Search, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Eye, ArrowLeft } from 'lucide-react'
+import request from '../utils/request'
 
 interface CosmicSample {
-    sample_id: number
-    sample_name: string | number
-    primary_site: string
-    primary_histology: string
-    histology_subtype_1: string
-    tumour_source: string
+    sampleId: number
+    sampleName: string | number
+    primarySite: string
+    primaryHistology: string
+    histologySubtype1: string
+    tumourSource: string
     age: number | null
     ethnicity: string
     gender: string
-    nci_code: string
-    sample_type: string
+    nciCode: string
+    sampleType: string
+}
+
+interface ApiResponse {
+    success: boolean
+    data: CosmicSample[]
+    totalItems: number
+    page: number
+    limit: number
+    totalPages: number
 }
 
 export default function CosmicSamples() {
     const navigate = useNavigate()
+    const tableRef = useRef<HTMLDivElement>(null)
+
     const [samples, setSamples] = useState<CosmicSample[]>([])
     const [loading, setLoading] = useState(true)
-    const [loadingProgress, setLoadingProgress] = useState(0)
     const [searchTerm, setSearchTerm] = useState('')
-    const [sortColumn, setSortColumn] = useState<keyof CosmicSample>('sample_id')
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+    const [sortColumn, setSortColumn] = useState<keyof CosmicSample>('sampleId')
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
     const [currentPage, setCurrentPage] = useState(1)
-    const [itemsPerPage, setItemsPerPage] = useState(50)
-    const [filterSite, setFilterSite] = useState<string>('all')
-    const [filterEthnicity, setFilterEthnicity] = useState<string>('all')
+    const [itemsPerPage, setItemsPerPage] = useState(20)
+    const [totalItems, setTotalItems] = useState(0)
+    const [totalPages, setTotalPages] = useState(0)
 
+    // Debounce search term
     useEffect(() => {
-        setLoadingProgress(10)
-        fetch('/CosmicSample_asian.json')
-            .then(response => {
-                setLoadingProgress(30)
-                return response.json()
-            })
-            .then(data => {
-                setLoadingProgress(80)
-                setSamples(data)
-                setLoadingProgress(100)
-                setLoading(false)
-            })
-            .catch(error => {
-                console.error('Error loading COSMIC data:', error)
-                setLoading(false)
-            })
-    }, [])
+        const timer = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm)
+        }, 500)
+        return () => clearTimeout(timer)
+    }, [searchTerm])
 
-    // Reset to page 1 when search or filter changes
+    // Reset page when search changes
     useEffect(() => {
         setCurrentPage(1)
-    }, [searchTerm, filterSite, filterEthnicity])
+    }, [debouncedSearchTerm])
 
-    // Get unique values for filters
-    const uniqueSites = useMemo(() => {
-        const sites = new Set(samples.map(s => s.primary_site).filter(Boolean))
-        return Array.from(sites).sort()
-    }, [samples])
+    // Fetch samples from API
+    const fetchSamples = async () => {
+        setLoading(true)
+        try {
+            let endpoint = '/cosmic-sample'
+            const params: Record<string, any> = {
+                page: currentPage,
+                limit: itemsPerPage,
+            }
 
-    const uniqueEthnicities = useMemo(() => {
-        const ethnicities = new Set(samples.map(s => s.ethnicity).filter(Boolean))
-        return Array.from(ethnicities).sort()
-    }, [samples])
+            // If there's a search term, use the search endpoint
+            if (debouncedSearchTerm) {
+                endpoint = '/cosmic-sample/search'
+                // Check if search term is a number (sample_id) or text (geneName)
+                if (!isNaN(Number(debouncedSearchTerm))) {
+                    params.sampleId = Number(debouncedSearchTerm)
+                } else {
+                    params.geneName = debouncedSearchTerm
+                }
+            }
+
+            const response = await request.get(endpoint, { params })
+            const data: ApiResponse = response.data
+
+            if (data && Array.isArray(data.data)) {
+                setSamples(data.data)
+                setTotalItems(data.totalItems || 0)
+                setTotalPages(data.totalPages || Math.ceil((data.totalItems || 0) / itemsPerPage))
+            } else {
+                setSamples([])
+                setTotalItems(0)
+                setTotalPages(0)
+            }
+        } catch (error) {
+            console.error('Error fetching Cosmic samples:', error)
+            setSamples([])
+            setTotalItems(0)
+            setTotalPages(0)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchSamples()
+    }, [currentPage, itemsPerPage, debouncedSearchTerm])
 
     const handleSort = (column: keyof CosmicSample) => {
         if (sortColumn === column) {
@@ -73,57 +110,29 @@ export default function CosmicSamples() {
         }
     }
 
-    const filteredAndSortedSamples = useMemo(() => {
-        return samples
-            .filter(sample => {
-                // Site filter
-                if (filterSite !== 'all' && sample.primary_site !== filterSite) return false
-                // Ethnicity filter
-                if (filterEthnicity !== 'all' && sample.ethnicity !== filterEthnicity) return false
-                // Search filter
-                if (searchTerm) {
-                    const searchLower = searchTerm.toLowerCase()
-                    return (
-                        String(sample.sample_id).includes(searchLower) ||
-                        String(sample.sample_name).toLowerCase().includes(searchLower) ||
-                        (sample.primary_site || '').toLowerCase().includes(searchLower) ||
-                        (sample.ethnicity || '').toLowerCase().includes(searchLower) ||
-                        (sample.primary_histology || '').toLowerCase().includes(searchLower)
-                    )
-                }
-                return true
-            })
-            .sort((a, b) => {
-                const aValue = a[sortColumn]
-                const bValue = b[sortColumn]
+    // Client-side sorting for current page
+    const sortedSamples = useMemo(() => {
+        return [...samples].sort((a, b) => {
+            const aValue = a[sortColumn]
+            const bValue = b[sortColumn]
 
-                if (aValue === null || aValue === undefined) return sortDirection === 'asc' ? 1 : -1
-                if (bValue === null || bValue === undefined) return sortDirection === 'asc' ? -1 : 1
+            if (aValue === null || aValue === undefined) return sortDirection === 'asc' ? 1 : -1
+            if (bValue === null || bValue === undefined) return sortDirection === 'asc' ? -1 : 1
 
-                if (typeof aValue === 'number' && typeof bValue === 'number') {
-                    return sortDirection === 'asc' ? aValue - bValue : bValue - aValue
-                }
+            if (typeof aValue === 'number' && typeof bValue === 'number') {
+                return sortDirection === 'asc' ? aValue - bValue : bValue - aValue
+            }
 
-                const aStr = String(aValue).toLowerCase()
-                const bStr = String(bValue).toLowerCase()
-                return sortDirection === 'asc'
-                    ? aStr.localeCompare(bStr)
-                    : bStr.localeCompare(aStr)
-            })
-    }, [samples, searchTerm, filterSite, filterEthnicity, sortColumn, sortDirection])
-
-    // Pagination calculations
-    const totalItems = filteredAndSortedSamples.length
-    const totalPages = Math.ceil(totalItems / itemsPerPage)
-    const startIndex = (currentPage - 1) * itemsPerPage
-    const endIndex = Math.min(startIndex + itemsPerPage, totalItems)
-    const paginatedSamples = filteredAndSortedSamples.slice(startIndex, endIndex)
-
-    const tableRef = useRef<HTMLDivElement>(null)
+            const aStr = String(aValue).toLowerCase()
+            const bStr = String(bValue).toLowerCase()
+            return sortDirection === 'asc'
+                ? aStr.localeCompare(bStr)
+                : bStr.localeCompare(aStr)
+        })
+    }, [samples, sortColumn, sortDirection])
 
     const goToPage = (page: number) => {
         setCurrentPage(Math.max(1, Math.min(page, totalPages)))
-        // Scroll to top of table
         tableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
@@ -171,14 +180,7 @@ export default function CosmicSamples() {
                 <div className="bg-white rounded-xl shadow-sm border border-slate-light p-6">
                     <div className="flex flex-col items-center justify-center h-64 gap-4">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500"></div>
-                        <p className="text-gray-600">Đang tải dữ liệu COSMIC ({loadingProgress}%)...</p>
-                        <div className="w-64 bg-gray-200 rounded-full h-2">
-                            <div
-                                className="bg-teal-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${loadingProgress}%` }}
-                            ></div>
-                        </div>
-                        <p className="text-sm text-gray-500">Vui lòng đợi...</p>
+                        <p className="text-gray-600">Đang tải dữ liệu COSMIC...</p>
                     </div>
                 </div>
             </div>
@@ -191,6 +193,13 @@ export default function CosmicSamples() {
             <div className="bg-white rounded-xl shadow-sm border border-slate-light p-6">
                 <div className="flex items-center justify-between">
                     <div>
+                        <button
+                            onClick={() => navigate('/home')}
+                            className="flex items-center gap-2 text-teal-600 hover:text-teal-800 mb-3 transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            <span className="text-sm font-medium">Quay lại Trang chủ</span>
+                        </button>
                         <h1 className="text-2xl font-bold text-teal-900 mb-2 flex items-center gap-3 uppercase">
                             <Database className="w-7 h-7 text-teal-500" />
                             Bộ dữ liệu giải trình tự gen
@@ -208,93 +217,42 @@ export default function CosmicSamples() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-teal-100 text-sm font-medium mb-1">Tổng số mẫu</p>
-                            <p className="text-3xl font-bold">{samples.length.toLocaleString()}</p>
+                            <p className="text-3xl font-bold">{totalItems.toLocaleString()}</p>
                         </div>
                         <Database className="w-10 h-10 text-teal-200" />
-                    </div>
-                </div>
-                <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl shadow-sm p-6 text-white">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-blue-100 text-sm font-medium mb-1">Loại mô</p>
-                            <p className="text-3xl font-bold">{uniqueSites.length}</p>
-                        </div>
-                        <Filter className="w-10 h-10 text-blue-200" />
-                    </div>
-                </div>
-                <div className="bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl shadow-sm p-6 text-white">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-purple-100 text-sm font-medium mb-1">Dân tộc</p>
-                            <p className="text-3xl font-bold">{uniqueEthnicities.length}</p>
-                        </div>
-                        <Filter className="w-10 h-10 text-purple-200" />
                     </div>
                 </div>
             </div>
 
             {/* Table */}
             <div ref={tableRef} className="bg-white rounded-xl shadow-sm border border-slate-light p-6">
-                {/* Search and Filters */}
-                <div className="flex flex-col gap-4 mb-6">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div className="relative max-w-md flex-1">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <input
-                                type="text"
-                                placeholder="Tìm kiếm theo ID, tên mẫu, mô, dân tộc..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                            />
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm text-gray-600">Hiển thị:</label>
-                            <select
-                                value={itemsPerPage}
-                                onChange={(e) => {
-                                    setItemsPerPage(Number(e.target.value))
-                                    setCurrentPage(1)
-                                }}
-                                className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
-                            >
-                                <option value={20}>20</option>
-                                <option value={50}>50</option>
-                                <option value={100}>100</option>
-                                <option value={200}>200</option>
-                            </select>
-                            <span className="text-sm text-gray-600">dòng</span>
-                        </div>
+                {/* Search */}
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                    <div className="relative max-w-md flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm theo Sample ID hoặc Gene Name..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                        />
                     </div>
-
-                    {/* Filter dropdowns */}
-                    <div className="flex flex-wrap gap-4">
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm text-gray-600">Loại mô:</label>
-                            <select
-                                value={filterSite}
-                                onChange={(e) => setFilterSite(e.target.value)}
-                                className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
-                            >
-                                <option value="all">Tất cả</option>
-                                {uniqueSites.map(site => (
-                                    <option key={site} value={site}>{formatSite(site)}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm text-gray-600">Dân tộc:</label>
-                            <select
-                                value={filterEthnicity}
-                                onChange={(e) => setFilterEthnicity(e.target.value)}
-                                className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
-                            >
-                                <option value="all">Tất cả</option>
-                                {uniqueEthnicities.map(eth => (
-                                    <option key={eth} value={eth}>{eth}</option>
-                                ))}
-                            </select>
-                        </div>
+                    <div className="flex items-center gap-2">
+                        <label className="text-sm text-gray-600">Hiển thị:</label>
+                        <select
+                            value={itemsPerPage}
+                            onChange={(e) => {
+                                setItemsPerPage(Number(e.target.value))
+                                setCurrentPage(1)
+                            }}
+                            className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+                        >
+                            <option value={20}>20</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
+                        <span className="text-sm text-gray-600">dòng</span>
                     </div>
                 </div>
 
@@ -305,7 +263,7 @@ export default function CosmicSamples() {
                             <tr className="bg-gray-50 border-b border-gray-200">
                                 <th
                                     className="px-3 py-3 text-left text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-100"
-                                    onClick={() => handleSort('sample_id')}
+                                    onClick={() => handleSort('sampleId')}
                                 >
                                     <div className="flex items-center gap-1">
                                         ID <ArrowUpDown className="w-3 h-3" />
@@ -313,7 +271,7 @@ export default function CosmicSamples() {
                                 </th>
                                 <th
                                     className="px-3 py-3 text-left text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-100"
-                                    onClick={() => handleSort('sample_name')}
+                                    onClick={() => handleSort('sampleName')}
                                 >
                                     <div className="flex items-center gap-1">
                                         Tên mẫu <ArrowUpDown className="w-3 h-3" />
@@ -321,7 +279,7 @@ export default function CosmicSamples() {
                                 </th>
                                 <th
                                     className="px-3 py-3 text-left text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-100"
-                                    onClick={() => handleSort('primary_site')}
+                                    onClick={() => handleSort('primarySite')}
                                 >
                                     <div className="flex items-center gap-1">
                                         Loại mô <ArrowUpDown className="w-3 h-3" />
@@ -329,7 +287,7 @@ export default function CosmicSamples() {
                                 </th>
                                 <th
                                     className="px-3 py-3 text-left text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-100"
-                                    onClick={() => handleSort('primary_histology')}
+                                    onClick={() => handleSort('primaryHistology')}
                                 >
                                     <div className="flex items-center gap-1">
                                         Mô học <ArrowUpDown className="w-3 h-3" />
@@ -365,33 +323,33 @@ export default function CosmicSamples() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
-                            {paginatedSamples.map((sample, index) => (
+                            {sortedSamples.map((sample, index) => (
                                 <tr
-                                    key={`${sample.sample_id}-${index}`}
+                                    key={`${sample.sampleId}-${index}`}
                                     className={`hover:bg-teal-50 transition-colors cursor-pointer ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
-                                    onClick={() => navigate(`/cosmic-samples/${sample.sample_id}`, { state: { sample } })}
+                                    onClick={() => navigate(`/cosmic-samples/${sample.sampleId}`)}
                                 >
-                                    <td className="px-3 py-2 text-xs text-gray-600 font-mono">{sample.sample_id}</td>
-                                    <td className="px-3 py-2 text-xs font-medium text-teal-700">{sample.sample_name}</td>
+                                    <td className="px-3 py-2 text-xs text-gray-600 font-mono">{sample.sampleId || '-'}</td>
+                                    <td className="px-3 py-2 text-xs font-medium text-teal-700">{sample.sampleName || '-'}</td>
                                     <td className="px-3 py-2 text-xs text-gray-600">
                                         <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
-                                            {formatSite(sample.primary_site)}
+                                            {formatSite(sample.primarySite)}
                                         </span>
                                     </td>
-                                    <td className="px-3 py-2 text-xs text-gray-600">{sample.primary_histology || 'N/A'}</td>
+                                    <td className="px-3 py-2 text-xs text-gray-600">{sample.primaryHistology || 'N/A'}</td>
                                     <td className="px-3 py-2 text-xs text-gray-600">
                                         <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">
                                             {sample.ethnicity || 'N/A'}
                                         </span>
                                     </td>
-                                    <td className="px-3 py-2 text-xs text-gray-600">{sample.age || 'N/A'}</td>
+                                    <td className="px-3 py-2 text-xs text-gray-600">{sample.age ?? 'N/A'}</td>
                                     <td className="px-3 py-2 text-xs text-gray-600">{formatGender(sample.gender)}</td>
-                                    <td className="px-3 py-2 text-xs text-gray-600">{sample.sample_type || 'N/A'}</td>
+                                    <td className="px-3 py-2 text-xs text-gray-600">{sample.sampleType || 'N/A'}</td>
                                     <td className="px-3 py-2 text-xs">
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation()
-                                                navigate(`/cosmic-samples/${sample.sample_id}`, { state: { sample } })
+                                                navigate(`/cosmic-samples/${sample.sampleId}`)
                                             }}
                                             className="flex items-center gap-1 px-2 py-1 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors"
                                         >
@@ -408,10 +366,7 @@ export default function CosmicSamples() {
                 {/* Pagination */}
                 <div className="mt-6 flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="text-sm text-gray-500">
-                        Hiển thị {totalItems > 0 ? startIndex + 1 : 0} - {endIndex} / {totalItems.toLocaleString()} mẫu
-                        {(searchTerm || filterSite !== 'all' || filterEthnicity !== 'all') &&
-                            ` (lọc từ ${samples.length.toLocaleString()} mẫu)`
-                        }
+                        Trang {currentPage} / {totalPages} ({totalItems.toLocaleString()} mẫu)
                     </div>
 
                     <div className="flex items-center gap-1">

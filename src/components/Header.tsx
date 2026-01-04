@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { User, LogOut, Settings, ChevronDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { removeToken } from '../utils/token'
-import logo from '../assets/Logo_2.png'
+import logo from '../assets/gene_icon.png'
 
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false)

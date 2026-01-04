@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Pill, Search, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CheckCircle, XCircle } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Pill, Search, ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CheckCircle, XCircle, ArrowLeft } from 'lucide-react'
 
 interface MedicineData {
     STT: number
@@ -8,6 +9,7 @@ interface MedicineData {
 }
 
 export default function MedicinesList() {
+    const navigate = useNavigate()
     const [medicines, setMedicines] = useState<MedicineData[]>([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
@@ -132,6 +134,13 @@ export default function MedicinesList() {
             <div className="bg-white rounded-xl shadow-sm border border-slate-light p-6">
                 <div className="flex items-center justify-between">
                     <div>
+                        <button
+                            onClick={() => navigate('/home')}
+                            className="flex items-center gap-2 text-teal-600 hover:text-teal-800 mb-3 transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            <span className="text-sm font-medium">Quay lại Trang chủ</span>
+                        </button>
                         <h1 className="text-2xl font-bold text-teal-900 mb-2 flex items-center gap-3 uppercase">
                             <Pill className="w-7 h-7 text-teal-500" />
                             Danh sách thuốc điều trị đích

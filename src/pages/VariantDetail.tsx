@@ -344,9 +344,7 @@ const VariantDetail: React.FC = () => {
                                     <td className="px-4 py-3 bg-slate-50 font-medium text-slate-600 w-1/4 border-r border-slate-300">Variant Rate</td>
                                     <td className="px-4 py-3">
                                         <span className="font-bold text-base text-green-600">
-                                            {variant.VariantRate != null && !isNaN(Number(variant.VariantRate))
-                                                ? Number(variant.VariantRate).toFixed(4)
-                                                : '-'}
+                                            {variant.VariantRate}
                                         </span>
                                     </td>
                                 </tr>

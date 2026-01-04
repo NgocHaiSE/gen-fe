@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Database, User, MapPin, Microscope, Pill, FileText, AlertCircle } from 'lucide-react'
+import axios from 'axios'
+import token from '../utils/token'
 
 interface CosmicSampleFull {
     sample_id: number
@@ -45,39 +47,43 @@ interface CosmicSampleFull {
     cosmic_phenotype_id: number
 }
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://aicancer.io.vn/api'
+
 export default function CosmicSampleDetail() {
     const { sampleId } = useParams<{ sampleId: string }>()
     const navigate = useNavigate()
-    const location = useLocation()
     const [sample, setSample] = useState<CosmicSampleFull | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
-    // Get sample from location state if available (passed from list)
+    // Fetch sample detail from API - using axios directly to bypass CaseConverter
     useEffect(() => {
-        if (location.state?.sample) {
-            setSample(location.state.sample)
-            setLoading(false)
-        } else {
-            // Fallback: fetch all data and find the sample (not recommended for large files)
+        const fetchSampleDetail = async () => {
             setLoading(true)
-            fetch('/CosmicSample_asian.json')
-                .then(response => response.json())
-                .then(data => {
-                    const found = data.find((s: CosmicSampleFull) => s.sample_id === Number(sampleId))
-                    if (found) {
-                        setSample(found)
-                    } else {
-                        setError('Không tìm thấy mẫu với ID này')
-                    }
-                    setLoading(false)
+            setError(null)
+            try {
+                const tokenObj = token.getTokenObject()
+                const response = await axios.get(`${BASE_URL}/cosmic-sample/detail/${sampleId}`, {
+                    headers: tokenObj.accessToken ? { Authorization: `Bearer ${tokenObj.accessToken}` } : {}
                 })
-                .catch(() => {
-                    setError('Lỗi tải dữ liệu')
-                    setLoading(false)
-                })
+                // API returns { success, sampleId, data: {...} }
+                if (response.data?.data) {
+                    setSample(response.data.data)
+                } else {
+                    setError('Không tìm thấy mẫu với ID này')
+                }
+            } catch (err) {
+                console.error('Error fetching sample detail:', err)
+                setError('Lỗi tải dữ liệu chi tiết')
+            } finally {
+                setLoading(false)
+            }
         }
-    }, [sampleId, location.state])
+
+        if (sampleId) {
+            fetchSampleDetail()
+        }
+    }, [sampleId])
 
     const formatValue = (value: any) => {
         if (value === null || value === undefined || value === '') return 'N/A'

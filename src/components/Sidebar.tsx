@@ -35,6 +35,14 @@ function SidebarItem({ item, currentPath }: { item: any; currentPath: string }) 
         }
     }
 
+    // Render icon - prefer iconImage if exists
+    const renderIcon = () => {
+        if (item.iconImage) {
+            return <img src={item.iconImage} alt={item.name} className="w-5 h-5 mr-3 object-contain" />
+        }
+        return <Icon className="w-5 h-5 mr-3 text-teal-500" />
+    }
+
     return (
         <li>
             {/* Parent Link */}
@@ -48,7 +56,7 @@ function SidebarItem({ item, currentPath }: { item: any; currentPath: string }) 
                         : "text-slate-dark hover:text-teal-700 hover:bg-teal-50 border-l-transparent"
                 )}
             >
-                <Icon className="w-5 h-5 mr-3 opacity-80" />
+                {renderIcon()}
                 <span className="flex-1 truncate">{item.name}</span>
                 {hasChildren && (
                     <span className="ml-auto opacity-60">

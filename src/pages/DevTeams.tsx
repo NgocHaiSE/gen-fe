@@ -1,4 +1,5 @@
-import { Users, Github, Linkedin, Mail, GraduationCap, Building2, Heart, Code2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Users, Github, Linkedin, Mail, GraduationCap, Building2, Heart, Code2, ArrowLeft } from 'lucide-react';
 
 interface TeamMember {
     id: string;
@@ -15,7 +16,7 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
     {
         id: '1',
-        name: 'PGS.TS. Nguyễn Văn A',
+        name: 'PGS.TS. Nguyễn Thị Trang',
         role: 'Trưởng nhóm nghiên cứu',
         institution: 'Đại học Y Hà Nội',
         avatar: '/avatars/default.png',
@@ -24,9 +25,9 @@ const teamMembers: TeamMember[] = [
     },
     {
         id: '2',
-        name: 'TS. Trần Thị B',
-        role: 'Nghiên cứu viên chính',
-        institution: 'Đại học Bách khoa Hà Nội',
+        name: 'TS. Phan Thị Hải Hồng',
+        role: 'Nghiên cứu viên',
+        institution: 'Học viện Kỹ thuật quân sự',
         avatar: '/avatars/default.png',
         bio: 'Chuyên gia về tin sinh học và phân tích dữ liệu gen',
         email: 'tranthib@hust.edu.vn',
@@ -34,21 +35,22 @@ const teamMembers: TeamMember[] = [
     },
     {
         id: '3',
-        name: 'ThS. Lê Văn C',
-        role: 'Kỹ sư phần mềm',
-        institution: 'Đại học Bách khoa Hà Nội',
-        avatar: '/avatars/default.png',
-        bio: 'Phát triển và duy trì hệ thống web application',
-        github: 'levanc'
-    },
-    {
-        id: '4',
         name: 'BS. Phạm Thị D',
         role: 'Bác sĩ chuyên khoa ung bướu',
         institution: 'Bệnh viện K',
         avatar: '/avatars/default.png',
         bio: 'Chuyên gia lâm sàng về điều trị ung thư phổi và ung thư vú',
         email: 'phamthid@bvk.vn'
+    },
+    {
+        id: '4',
+        name: 'Nguyễn Ngọc Hải',
+        role: 'Kỹ sư phần mềm',
+        institution: 'Học viện Kỹ thuật quân sự',
+        avatar: '/avatars/default.png',
+        bio: 'Phát triển và duy trì hệ thống web application',
+        email: 'devnnhai@gmail.com',
+        github: 'NgocHaiSE'
     },
     {
         id: '5',
@@ -69,16 +71,25 @@ const teamMembers: TeamMember[] = [
 ];
 
 const DevTeams = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="w-full animate-fade-in space-y-6">
             {/* Header */}
             <div className="bg-gradient-to-r from-teal-600 to-teal-800 rounded-xl shadow-lg p-8 text-white">
+                <button
+                    onClick={() => navigate('/home')}
+                    className="flex items-center gap-2 text-teal-100 hover:text-white mb-4 transition-colors"
+                >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span className="text-sm font-medium">Quay lại Trang chủ</span>
+                </button>
                 <div className="flex items-center gap-4 mb-4">
                     <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
                         <Users className="w-8 h-8" />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold text-teal-900 uppercase">NHÓM PHÁT TRIỂN</h1>
+                        <h1 className="text-2xl font-bold text-white uppercase">NHÓM PHÁT TRIỂN</h1>
                         <p className="text-teal-100 mt-1">Đội ngũ nghiên cứu và phát triển hệ thống</p>
                     </div>
                 </div>
@@ -95,7 +106,7 @@ const DevTeams = () => {
                     Đơn vị hợp tác
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {['Đại học Y Hà Nội', 'Đại học Bách khoa Hà Nội', 'Bệnh viện K', 'Bệnh viện Bạch Mai'].map((inst, index) => (
+                    {['Đại học Y Hà Nội', 'Học viện Kỹ thuật quân sự', 'Bệnh viện K', 'Bệnh viện Bạch Mai'].map((inst, index) => (
                         <div key={index} className="text-center p-4 bg-slate-50 rounded-lg">
                             <GraduationCap className="w-8 h-8 text-teal-500 mx-auto mb-2" />
                             <p className="text-sm font-medium text-slate-dark">{inst}</p>
@@ -151,9 +162,6 @@ const DevTeams = () => {
                 </div>
                 <p className="text-sm text-teal-900 font-medium mb-1">
                     Được phát triển với sự tận tâm vì sức khỏe cộng đồng
-                </p>
-                <p className="text-xs text-teal-700">
-                    © 2024 PROJECT UNG THƯ - Hanoi University of Science and Technology & Hanoi Medical University
                 </p>
             </div>
         </div>

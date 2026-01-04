@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import { BarChart3, PieChart, TrendingUp, Users, Activity, Heart, Stethoscope, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { BarChart3, PieChart, TrendingUp, Users, Activity, Heart, Stethoscope, Loader2, ArrowLeft } from 'lucide-react';
 import {
     BarChart,
     Bar,
@@ -40,6 +41,7 @@ const organIcons: Record<string, React.ReactNode> = {
 };
 
 const Statistics = () => {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [total, setTotal] = useState(0);
     const [details, setDetails] = useState<DetailItem[]>([]);
@@ -104,6 +106,13 @@ const Statistics = () => {
         <div className="w-full animate-fade-in space-y-6">
             {/* Header */}
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <button
+                    onClick={() => navigate('/home')}
+                    className="flex items-center gap-2 text-teal-600 hover:text-teal-800 mb-3 transition-colors"
+                >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span className="text-sm font-medium">Quay lại Trang chủ</span>
+                </button>
                 <h1 className="text-2xl font-bold text-teal-900 mb-2 flex items-center gap-3 uppercase">
                     <BarChart3 className="w-7 h-7 text-teal-500" />
                     THỐNG KÊ XÉT NGHIỆM UNG THƯ
