@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BarChart3, PieChart, TrendingUp, Users, Activity, Heart, Stethoscope, Loader2, ArrowLeft } from 'lucide-react';
+import { BarChart3, PieChart, TrendingUp, Users, Loader2, ArrowLeft } from 'lucide-react';
 import {
     BarChart,
     Bar,
@@ -15,6 +15,12 @@ import {
     Legend,
 } from 'recharts';
 import statisticsService from '../services/statistics';
+
+import lungIcon from '../assets/lung-icon.png';
+import liverIcon from '../assets/liver-icon.png';
+import breastIcon from '../assets/breast-icon.png';
+import thyroidIcon from '../assets/thyroid-icon.png';
+import colorectalIcon from '../assets/colorectal-icon.png';
 
 interface DetailItem {
     organ: 'lung' | 'breast' | 'colorectal' | 'liver' | 'thyroid';
@@ -33,11 +39,11 @@ const organColors: Record<string, string> = {
 };
 
 const organIcons: Record<string, React.ReactNode> = {
-    'Phổi': <Activity className="w-6 h-6" />,
-    'Vú': <Heart className="w-6 h-6" />,
-    'Đại tràng': <Stethoscope className="w-6 h-6" />,
-    'Gan': <Activity className="w-6 h-6" />,
-    'Tuyến giáp': <Activity className="w-6 h-6" />,
+    'Phổi': <img src={lungIcon} alt="Ung thư phổi" className="w-8 h-8 object-contain" />,
+    'Vú': <img src={breastIcon} alt="Ung thư vú" className="w-8 h-8 object-contain" />,
+    'Đại tràng': <img src={colorectalIcon} alt="Ung thư đại trực tràng" className="w-8 h-8 object-contain" />,
+    'Gan': <img src={liverIcon} alt="Ung thư gan" className="w-8 h-8 object-contain" />,
+    'Tuyến giáp': <img src={thyroidIcon} alt="Ung thư tuyến giáp" className="w-8 h-8 object-contain" />,
 };
 
 const Statistics = () => {
@@ -189,7 +195,7 @@ const Statistics = () => {
                                     axisLine={{ stroke: '#CBD5E1' }}
                                 />
                                 <Tooltip
-                                    formatter={(value: number) => [`${value.toLocaleString()} ca`, 'Số lượng']}
+                                    formatter={(value: any) => [`${Number(value).toLocaleString()} ca`, 'Số lượng']}
                                     contentStyle={{
                                         borderRadius: '8px',
                                         border: '1px solid #E4E9F0',
@@ -230,7 +236,7 @@ const Statistics = () => {
                                     innerRadius={60}
                                     outerRadius={100}
                                     paddingAngle={2}
-                                    label={({ percent }) => `${(percent * 100).toFixed(1)}%`}
+                                    label={({ percent }: any) => `${((percent || 0) * 100).toFixed(1)}%`}
                                     labelLine={{ stroke: '#64748B' }}
                                 >
                                     {pieData.map((entry, index) => (
@@ -241,7 +247,7 @@ const Statistics = () => {
                                     ))}
                                 </Pie>
                                 <Tooltip
-                                    formatter={(value: number) => [`${value.toLocaleString()} ca`, 'Số lượng']}
+                                    formatter={(value: any) => [`${Number(value).toLocaleString()} ca`, 'Số lượng']}
                                     contentStyle={{
                                         borderRadius: '8px',
                                         border: '1px solid #E4E9F0'

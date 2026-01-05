@@ -140,7 +140,7 @@ export default function DNALibrary() {
                             Thư viện phân lập DNA
                         </h1>
                         <p className="text-slate-medium">
-                            Thư viện phân lập DNA của tối thiểu 100 gen đích liên quan đến sự đáp ứng của thuốc điều trị một số loại ung thư phổ biến từ 400 đối tượng nghiên cứu người Việt Nam.
+                            Thư viện phân lập DNA của tối thiểu 100 gen đích liên quan đến sự đáp ứng của thuốc điều trị một số loại ung thư phổ biến từ 457 đối tượng nghiên cứu người Việt Nam.
                         </p>
                     </div>
                 </div>
@@ -161,7 +161,7 @@ export default function DNALibrary() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-purple-100 text-sm font-medium mb-1">Tổng số nghiên cứu</p>
-                            <p className="text-3xl font-bold">400</p>
+                            <p className="text-3xl font-bold">457</p>
                         </div>
                         <Database className="w-10 h-10 text-purple-200" />
                     </div>

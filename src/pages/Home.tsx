@@ -57,28 +57,28 @@ export default function Home() {
     const features: FeatureCardProps[] = [
         {
             title: 'Thư Viện Phân Lập DNA',
-            description: 'Thư viện phân lập DNA của tối thiểu 100 gen đích liên quan đến sự đáp ứng của thuốc điều trị một số loại ung thư phổ biến từ 400 đối tượng nghiên cứu người Việt Nam.',
+            description: 'Thư viện phân lập DNA của tối thiểu 100 gen đích liên quan đến sự đáp ứng của thuốc điều trị một số loại ung thư phổ biến từ 457 đối tượng nghiên cứu người Việt Nam.',
             icon: Dna,
             link: '/dna-library',
             iconBg: 'bg-gradient-to-br from-blue-500 to-blue-600',
         },
         {
             title: 'Kết Quả Giải Trình Tự',
-            description: 'Kết quả giải trình tự toàn bộ của tối thiểu 100 gen và gen đột biến của 400 đối tượng nghiên cứu người Việt Nam liên quan đến đáp ứng điều trị một số loại ung thư.',
+            description: 'Kết quả giải trình tự toàn bộ của tối thiểu 100 gen và gen đột biến của 457 đối tượng nghiên cứu người Việt Nam liên quan đến đáp ứng điều trị một số loại ung thư.',
             icon: ClipboardList,
             link: '/tests/statistics',
             iconBg: 'bg-gradient-to-br from-purple-500 to-purple-600',
         },
         {
             title: 'Danh Sách Thuốc Điều Trị Đích',
-            description: 'Danh sách thuốc đích các loại ung thư phổ biến ở 400 đối tượng người Việt và 7000 đối tượng trên Thế giới được Việt Nam và FDA phê duyệt.',
+            description: 'Danh sách thuốc đích các loại ung thư phổ biến ở 457 đối tượng người Việt và 7000 đối tượng trên Thế giới được Việt Nam và FDA phê duyệt.',
             icon: Pill,
             link: '/medicines-list',
             iconBg: 'bg-gradient-to-br from-teal-500 to-teal-600'
         },
         {
             title: 'Bộ Dữ liệu Giải Trình Tự Gen',
-            description: 'Bộ CSDL giải trình tự của 457 bệnh nhân Việt Nam kết hợp với 97.370 bản ghi dữ liệu quốc tế từ COSMIC, CIViC, OncoKB và DGIdb.',
+            description: 'Bộ CSDL giải trình tự của 457 bệnh nhân Việt Nam kết hợp với 97.020 bản ghi dữ liệu quốc tế từ COSMIC, CIViC, OncoKB và DGIdb.',
             icon: Database,
             link: '/cosmic-samples',
             iconBg: 'bg-gradient-to-br from-emerald-500 to-emerald-600',

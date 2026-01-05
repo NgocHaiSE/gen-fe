@@ -205,7 +205,7 @@ export default function CosmicSamples() {
                             Bộ dữ liệu giải trình tự gen
                         </h1>
                         <p className="text-slate-medium">
-                            Bộ CSDL giải trình tự của 457 bệnh nhân Việt Nam kết hợp với 97.370 bản ghi dữ liệu quốc tế từ COSMIC, CIViC, OncoKB và DGIdb.
+                            Bộ CSDL giải trình tự của 457 bệnh nhân Việt Nam kết hợp với 97.020 bản ghi dữ liệu quốc tế từ COSMIC, CIViC, OncoKB và DGIdb.
                         </p>
                     </div>
                 </div>
