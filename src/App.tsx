@@ -29,6 +29,7 @@ import DNALibrary from './pages/DNALibrary.tsx'
 import MedicinesList from './pages/MedicinesList.tsx'
 import CosmicSamples from './pages/CosmicSamples.tsx'
 import CosmicSampleDetail from './pages/CosmicSampleDetail.tsx'
+import MutationInfoPage from './pages/MutationInfoPage.tsx'
 import PanelData from './pages/PanelData.tsx'
 import UserManagement from './pages/UserManagement.tsx'
 import AccountInfo from './pages/AccountInfo.tsx'
@@ -158,6 +159,7 @@ function App() {
                 {/* Cosmic Samples */}
                 <Route path="cosmic-samples" element={<CosmicSamples />} />
                 <Route path="cosmic-samples/:sampleId" element={<CosmicSampleDetail />} />
+                <Route path="cosmic-samples/:sampleId/mutations/:organType/:individualId" element={<MutationInfoPage />} />
 
                 {/* Dev Teams */}
                 <Route path="dev-teams" element={<DevTeams />} />

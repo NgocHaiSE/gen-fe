@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Database, User, MapPin, Microscope, Pill, FileText, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Database, User, MapPin, Microscope, Pill, FileText, AlertCircle, Dna } from 'lucide-react'
 import axios from 'axios'
 import token from '../utils/token'
 
@@ -48,6 +48,17 @@ interface CosmicSampleFull {
 }
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://aicancer.io.vn/api'
+
+// Map primary_site to organ type for navigation
+const mapPrimarySiteToOrgan = (primarySite: string): string | null => {
+    const site = primarySite?.toLowerCase().replace(/_/g, ' ') || ''
+    if (site.includes('lung')) return 'lung'
+    if (site.includes('breast')) return 'breast'
+    if (site.includes('thyroid')) return 'thyroid'
+    if (site.includes('large intestine') || site.includes('colon') || site.includes('colorectal')) return 'colorectal'
+    if (site.includes('liver') || site.includes('hepat')) return 'hepatocellular'
+    return null
+}
 
 export default function CosmicSampleDetail() {
     const { sampleId } = useParams<{ sampleId: string }>()
@@ -110,6 +121,19 @@ export default function CosmicSampleDetail() {
         return site?.replace(/_/g, ' ') || 'N/A'
     }
 
+    // Navigate to mutation info page
+    const handleViewMutations = () => {
+        if (!sample) return
+
+        const organType = mapPrimarySiteToOrgan(sample.primary_site)
+        if (!organType) {
+            alert('Loại cơ quan không được hỗ trợ (chỉ hỗ trợ: phổi, gan, vú, tuyến giáp, đại trực tràng)')
+            return
+        }
+
+        navigate(`/cosmic-samples/${sampleId}/mutations/${organType}/${sample.id_individual}`)
+    }
+
     if (loading) {
         return (
             <div className="w-full animate-fade-in space-y-6">
@@ -145,23 +169,32 @@ export default function CosmicSampleDetail() {
         <div className="w-full animate-fade-in space-y-6">
             {/* Header */}
             <div className="bg-white rounded-xl shadow-sm border border-slate-light p-6">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => navigate('/cosmic-samples')}
-                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                        title="Quay lại"
-                    >
-                        <ArrowLeft className="w-5 h-5 text-gray-600" />
-                    </button>
-                    <div>
-                        <h1 className="text-2xl font-bold text-teal-900 flex items-center gap-3">
-                            <Database className="w-7 h-7 text-teal-500" />
-                            Chi tiết mẫu: {sample.sample_name}
-                        </h1>
-                        <p className="text-slate-medium">
-                            ID: {sample.sample_id} | COSMIC Phenotype ID: {sample.cosmic_phenotype_id}
-                        </p>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => navigate('/cosmic-samples')}
+                            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                            title="Quay lại"
+                        >
+                            <ArrowLeft className="w-5 h-5 text-gray-600" />
+                        </button>
+                        <div>
+                            <h1 className="text-2xl font-bold text-teal-900 flex items-center gap-3">
+                                <Database className="w-7 h-7 text-teal-500" />
+                                Chi tiết mẫu: {sample.sample_name}
+                            </h1>
+                            <p className="text-slate-medium">
+                                ID: {sample.sample_id} | COSMIC Phenotype ID: {sample.cosmic_phenotype_id}
+                            </p>
+                        </div>
                     </div>
+                    <button
+                        onClick={handleViewMutations}
+                        className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg hover:from-teal-600 hover:to-teal-700 transition-all shadow-md hover:shadow-lg font-medium"
+                    >
+                        <Dna className="w-5 h-5" />
+                        Xem thông tin đột biến gen
+                    </button>
                 </div>
             </div>
 
@@ -192,7 +225,7 @@ export default function CosmicSampleDetail() {
                         Thông tin bệnh nhân
                     </h2>
                     <div className="space-y-3">
-                        <InfoRow label="Tuổi" value={sample.age !== null ? `${sample.age} tuổi` : 'N/A'} />
+                        <InfoRow label="Tuổi" value={sample.age !== null ? `${sample.age}` : 'N/A'} />
                         <InfoRow label="Giới tính" value={formatGender(sample.gender)} />
                         <InfoRow label="Dân tộc" value={sample.ethnicity} highlight />
                         <InfoRow label="Yếu tố môi trường" value={formatValue(sample.environmental_variables)} />
