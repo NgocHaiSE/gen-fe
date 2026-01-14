@@ -29,3 +29,6 @@ route
 *.njsproj
 *.sln
 *.sw?
+
+BackEnd
+gen-AI
